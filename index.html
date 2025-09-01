@@ -157,11 +157,11 @@
         .topic-image {
             width: 100%;
             max-height: 300px;
-            object-fit: contain; /* ALTERADO para 'contain' para garantir que a imagem inteira seja visível */
+            object-fit: contain;
             border-radius: 8px;
             margin: 0 auto 20px auto;
             display: block;
-            cursor: pointer; /* Indica que a imagem é clicável */
+            cursor: pointer;
         }
 
         .book-navigation {
@@ -365,7 +365,7 @@
             h1 { font-size: 1.8rem; }
             .page-content { font-size: 15px; }
             #themeToggleBtn { top: 10px; right: 10px; }
-            .topic-image { max-height: 220px; } /* Ajuste para telemóveis */
+            .topic-image { max-height: 220px; }
         }
 
         @media (max-width: 480px) {
@@ -431,6 +431,13 @@
     </div>
 
     <script>
+        // =========================================================================
+        // IMPORTANTE: Para o site funcionar online, precisa da sua chave de API aqui.
+        // 1. Obtenha a sua chave em: https://makersuite.google.com/app/apikey
+        // 2. Cole a chave entre as aspas.
+        // =========================================================================
+        const GEMINI_API_KEY = "COLE_AQUI_SUA_CHAVE_REAL"; // <-- SUBSTITUA ESTE TEXTO PELA SUA CHAVE
+
         // --- ELEMENTOS DO DOM ---
         const searchInput = document.getElementById('searchInput');
         const searchButton = document.getElementById('searchButton');
@@ -634,6 +641,12 @@
         }
 
         async function fetchRandomCuriosityOnLoad() {
+             if (!hasApiKey()) {
+                curiosityContainer.style.display = 'block';
+                curiosityContainer.innerHTML = `<h3>Você Sabia?</h3><p>Para ativar as funcionalidades de curiosidades e resumos, obtenha a sua chave de API gratuita no Google AI Studio e cole no código deste ficheiro.</p>`;
+                return;
+            }
+
             curiosityContainer.style.display = 'block';
             curiosityContainer.innerHTML = '<h3>Você Sabia?</h3><div class="loader" style="margin: 10px auto; width: 20px; height: 20px;"></div>';
             
@@ -677,7 +690,11 @@
                     paginateText(currentTopicText.replace(/\n/g, '<br><br>'));
                     
                     generateAndDisplayCuriosity();
-                    actionButtons.style.display = 'flex';
+                    if (hasApiKey()) {
+                        actionButtons.style.display = 'flex';
+                        summarizeButton.disabled = false;
+                        summarizeButton.textContent = 'Resumir Texto';
+                    }
                 }
             } catch (error) {
                 console.error('Erro ao buscar na API da Wikipedia:', error);
@@ -702,17 +719,20 @@
                 const summaryResult = await callGeminiAPI(prompt);
                 summaryContainer.innerHTML = `<h3>Resumo</h3><p>${summaryResult.replace(/\n/g, '<br><br>')}</p>`;
                 
-                actionButtons.style.display = 'none'; // Esconde o botão após resumir
+                actionButtons.style.display = 'none'; 
 
             } catch (error) {
                 console.error("Não foi possível gerar o resumo:", error);
-                summaryContainer.innerHTML = `<h3>Erro ao Resumir</h3><p style="color: #c0392b; text-align: center;">Não foi possível gerar o resumo. Por favor, tente novamente mais tarde.</p>`;
+                let userMessage = `Não foi possível gerar o resumo. <br><strong>Detalhe técnico:</strong> ${error.message}`;
+                summaryContainer.innerHTML = `<h3>Erro ao Resumir</h3><p style="color: #c0392b; text-align: center;">${userMessage}</p>`;
                 summarizeButton.disabled = false;
                 summarizeButton.textContent = 'Resumir Texto';
             }
         }
 
         async function generateAndDisplayCuriosity() {
+            if (!hasApiKey()) return; 
+
             curiosityContainer.style.display = 'block';
             curiosityContainer.innerHTML = '<div class="loader" style="margin: 10px auto; width: 20px; height: 20px;"></div>';
 
@@ -728,9 +748,16 @@
             }
         }
 
+        function hasApiKey() {
+            return typeof GEMINI_API_KEY !== 'undefined' && GEMINI_API_KEY !== "COLE_AQUI_SUA_CHAVE_REAL";
+        }
+
         async function callGeminiAPI(promptText) {
-            const apiKey = ""; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            if (!hasApiKey()) {
+                 throw new Error("Chave de API não configurada.");
+            }
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
             const payload = { contents: [{ parts: [{ text: promptText }] }] };
 
             const response = await fetch(apiUrl, {
