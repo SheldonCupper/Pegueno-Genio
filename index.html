@@ -156,8 +156,8 @@
 
         .topic-image {
             width: 100%;
-            max-height: 250px;
-            object-fit: cover;
+            max-height: 300px;
+            object-fit: contain; /* ALTERADO para 'contain' para garantir que a imagem inteira seja visível */
             border-radius: 8px;
             margin: 0 auto 20px auto;
             display: block;
@@ -261,6 +261,39 @@
             border-radius: 8px;
             cursor: pointer;
         }
+        
+        /* Botões de Ação */
+        #actionButtons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-button {
+            padding: 10px 20px;
+            border: 1px solid #3498db;
+            background-color: var(--page-bg-color);
+            color: #3498db;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-button:hover:not(:disabled) {
+            background-color: #3498db;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .action-button:disabled {
+            background-color: #bdc3c7;
+            border-color: #bdc3c7;
+            color: white;
+            cursor: not-allowed;
+        }
 
         .loader {
             border: 5px solid #f3f3f3;
@@ -272,8 +305,8 @@
             margin: 30px auto;
         }
         
-        /* Container da Curiosidade */
-        .curiosity-container {
+        /* Container da Curiosidade e Resumo */
+        .curiosity-container, .summary-container {
             text-align: left;
             margin-top: 20px;
             padding: 20px;
@@ -282,7 +315,7 @@
             background-color: var(--curiosity-bg-color);
             transition: background-color 0.3s ease;
         }
-        .curiosity-container h3 {
+        .curiosity-container h3, .summary-container h3 {
             text-align: center;
             color: var(--curiosity-title-color);
             margin-top: 0;
@@ -332,6 +365,7 @@
             h1 { font-size: 1.8rem; }
             .page-content { font-size: 15px; }
             #themeToggleBtn { top: 10px; right: 10px; }
+            .topic-image { max-height: 220px; } /* Ajuste para telemóveis */
         }
 
         @media (max-width: 480px) {
@@ -382,6 +416,11 @@
             </div>
         </div>
         
+        <div id="actionButtons" style="display: none;">
+            <button id="summarizeButton" class="action-button">Resumir Texto</button>
+        </div>
+        
+        <div id="summaryContainer" class="summary-container" style="display: none;"></div>
         <div id="curiosityContainer" class="curiosity-container" style="display: none;"></div>
     </main>
     
@@ -408,6 +447,11 @@
         const pageSelector = document.getElementById('pageSelector');
         const totalPagesLabel = document.getElementById('totalPagesLabel');
         const curiosityContainer = document.getElementById('curiosityContainer');
+        const summaryContainer = document.getElementById('summaryContainer');
+
+        // Elementos de Ação
+        const actionButtons = document.getElementById('actionButtons');
+        const summarizeButton = document.getElementById('summarizeButton');
 
         // Elementos do Modal de Imagem
         const imageModal = document.getElementById('imageModal');
@@ -416,6 +460,7 @@
         
         // --- ESTADO DA APLICAÇÃO ---
         let currentTopicTitle = '';
+        let currentTopicText = ''; 
         let pages = [];
         let currentPageIndex = 0;
         let imageUrl = '';
@@ -445,7 +490,6 @@
             let theme = isDarkMode ? 'dark' : 'light';
             themeToggleBtn.textContent = isDarkMode ? '☀️' : '🌙';
             localStorage.setItem('theme', theme);
-            // Re-aplica o fundo padrão do tema, se nenhum filtro estiver ativo
              document.documentElement.style.setProperty('--body-bg-image', isDarkMode ? backgroundImages.default_dark : backgroundImages.default_light);
         });
 
@@ -454,6 +498,7 @@
         prevPageBtn.addEventListener('click', showPrevPage);
         nextPageBtn.addEventListener('click', showNextPage);
         pageSelector.addEventListener('change', selectPage);
+        summarizeButton.addEventListener('click', generateAndDisplaySummary);
 
         document.addEventListener('keydown', (e) => {
             if (bookContainer.style.display === 'block' && e.key === 'ArrowLeft') showPrevPage();
@@ -531,7 +576,6 @@
                 bookPagesContainer.innerHTML += `<div class="page" id="page-${i}"><div class="page-content">${pages[i]}</div></div>`;
             }
             
-            // Adiciona o ouvinte de clique à imagem da primeira página
             const imgElement = bookPagesContainer.querySelector('.topic-image');
             if (imgElement) {
                 imgElement.addEventListener('click', () => openModal(imgElement.src));
@@ -586,7 +630,6 @@
                 body.classList.remove('dark-mode');
                 themeToggleBtn.textContent = '🌙';
             }
-            // Define o fundo inicial com base no tema
             document.documentElement.style.setProperty('--body-bg-image', isDarkMode ? backgroundImages.default_dark : backgroundImages.default_light);
         }
 
@@ -613,6 +656,8 @@
             loader.style.display = 'block';
             bookContainer.style.display = 'none';
             curiosityContainer.style.display = 'none';
+            summaryContainer.style.display = 'none';
+            actionButtons.style.display = 'none';
             searchButton.disabled = true;
             imageUrl = '';
 
@@ -626,12 +671,13 @@
                      paginateText(`Não foi possível encontrar resultados para "${query}".`);
                 } else {
                     currentTopicTitle = pageData.title;
+                    currentTopicText = pageData.extract || 'Conteúdo não encontrado.';
                     if (pageData.thumbnail) imageUrl = pageData.thumbnail.source;
                     
-                    const rawText = pageData.extract || 'Conteúdo não encontrado.';
-                    paginateText(rawText.replace(/\n/g, '<br><br>'));
+                    paginateText(currentTopicText.replace(/\n/g, '<br><br>'));
                     
                     generateAndDisplayCuriosity();
+                    actionButtons.style.display = 'flex';
                 }
             } catch (error) {
                 console.error('Erro ao buscar na API da Wikipedia:', error);
@@ -641,6 +687,28 @@
                 bookContainer.style.display = 'block';
                 displayPages();
                 searchButton.disabled = false;
+            }
+        }
+        
+        async function generateAndDisplaySummary() {
+            summarizeButton.disabled = true;
+            summarizeButton.textContent = 'A resumir...';
+            summaryContainer.style.display = 'block';
+            summaryContainer.innerHTML = '<h3>Resumo</h3><div class="loader" style="margin: 10px auto; width: 20px; height: 20px;"></div>';
+
+            try {
+                const prompt = `Faça um resumo conciso e informativo sobre "${currentTopicTitle}", baseado no texto a seguir. O resumo deve capturar os pontos principais e ser fácil de entender.\n\nTEXTO ORIGINAL:\n${currentTopicText}`;
+                
+                const summaryResult = await callGeminiAPI(prompt);
+                summaryContainer.innerHTML = `<h3>Resumo</h3><p>${summaryResult.replace(/\n/g, '<br><br>')}</p>`;
+                
+                actionButtons.style.display = 'none'; // Esconde o botão após resumir
+
+            } catch (error) {
+                console.error("Não foi possível gerar o resumo:", error);
+                summaryContainer.innerHTML = `<h3>Erro ao Resumir</h3><p style="color: #c0392b; text-align: center;">Não foi possível gerar o resumo. Por favor, tente novamente mais tarde.</p>`;
+                summarizeButton.disabled = false;
+                summarizeButton.textContent = 'Resumir Texto';
             }
         }
 
