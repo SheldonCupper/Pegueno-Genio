@@ -1,643 +1,236 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pequeno Gênio</title>
-    
-    <!-- CSS incorporado para estilizar a página -->
+    <title>PORCENTAGEM CALCULATER</title>
+    <!-- Incluindo Tailwind CSS para um design moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Importando a fonte Inter do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
-
-        /* --- VARIÁVEIS DE COR PARA TEMAS --- */
-        :root {
-            --body-bg-image: url('https://images.pexels.com/photos/694740/pexels-photo-694740.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
-            --body-bg-color: #f0f2f5;
-            --main-bg-color: #ffffff;
-            --text-color: #333;
-            --title-color: #2c3e50;
-            --page-bg-color: #fff;
-            --page-border-color: #ddd;
-            --page-content-color: #34495e;
-            --filter-bg-color: #f8f9fa;
-            --filter-border-color: #ced4da;
-            --filter-text-color: #495057;
-            --input-bg-color: #fff;
-            --input-border-color: #bdc3c7;
-            --curiosity-bg-color: #eaf5ff;
-            --curiosity-border-color: #3498db;
-            --curiosity-title-color: #2980b9;
-            --toggle-border-color: #ddd;
-            --toggle-icon-color: #2c3e50;
-            --toggle-hover-bg: #f0f0f0;
-        }
-
-        body.dark-mode {
-            --body-bg-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg');
-            --body-bg-color: #121212;
-            --main-bg-color: rgba(30, 30, 30, 0.9); /* Fundo semi-transparente */
-            --text-color: #e0e0e0;
-            --title-color: #ffffff;
-            --page-bg-color: #2a2a2a;
-            --page-border-color: #444;
-            --page-content-color: #cccccc;
-            --filter-bg-color: #333;
-            --filter-border-color: #555;
-            --filter-text-color: #ccc;
-            --input-bg-color: #333;
-            --input-border-color: #555;
-            --curiosity-bg-color: #2c3e50;
-            --curiosity-border-color: #3498db;
-            --curiosity-title-color: #eaf5ff;
-            --toggle-border-color: #555;
-            --toggle-icon-color: #f0f0f0;
-            --toggle-hover-bg: #333;
-        }
-
-        /* Estilos gerais do corpo da página */
+        /* Estilo para usar a fonte Inter como padrão e adicionar imagem de fundo */
         body {
-            font-family: 'Roboto', sans-serif;
-            background-image: var(--body-bg-image);
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1554224155-1696413565d3?q=80&w=2070&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
-            background-color: var(--body-bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
+            background-attachment: fixed; /* Mantém a imagem fixa durante o scroll */
+        }
+        /* Estilo para remover as setas dos inputs de número */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
             margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-            transition: background-color 0.3s ease;
         }
-
-        /* Container principal */
-        main {
-            background-color: var(--main-bg-color);
-            color: var(--text-color);
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 1100px;
-            text-align: center;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            margin-top: 20px;
-            position: relative;
+        input[type=number] {
+            -moz-appearance: textfield;
         }
-        
-        #themeToggleBtn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: 1px solid var(--toggle-border-color);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: var(--toggle-icon-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        /* Estilo customizado para os radio buttons */
+        .custom-radio:checked {
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+            border-color: #4f46e5; /* indigo-600 */
+            background-color: #4f46e5; /* indigo-600 */
         }
-        #themeToggleBtn:hover {
-            background-color: var(--toggle-hover-bg);
+        /* Estilo para destacar a opção selecionada */
+        .selected-radio {
+            border-color: #4f46e5; /* indigo-600 */
+            background-color: #eef2ff; /* indigo-50 */
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
         }
-
-        /* Título principal */
-        h1 {
-            font-family: 'Playfair Display', serif;
-            color: var(--title-color);
-            margin-bottom: 10px;
-        }
-        
-        /* --- ESTILOS DO LIVRO --- */
-        .book-container {
-            margin-top: 20px;
-            perspective: 2500px;
-        }
-
-        .book {
-            width: 100%;
-            height: 65vh;
-            max-height: 550px;
-            position: relative;
-            transition: transform 0.5s;
-        }
-
-        .page {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: var(--page-bg-color);
-            padding: 20px;
-            box-sizing: border-box;
-            border: 1px solid var(--page-border-color);
-            display: none;
-            flex-direction: column;
-            overflow-y: auto;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-        
-        .page.active { display: flex; }
-        
-        .page-content {
-            font-size: 16px;
-            line-height: 1.7;
-            text-align: justify;
-            color: var(--page-content-color);
-        }
-
-        .topic-image {
-            width: 100%;
-            max-height: 250px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin: 0 auto 20px auto;
-            display: block;
-        }
-
-        .book-navigation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
-        
-        .nav-button {
-            padding: 10px 20px;
-            border: none;
-            background-color: #3498db;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .nav-button:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-        }
-        
-        #pageSelectorContainer {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 14px;
-            color: #7f8c8d;
-        }
-
-        #pageSelector {
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 5px;
-            background-color: var(--input-bg-color);
-            color: var(--text-color);
-            cursor: pointer;
-        }
-
-        /* Container dos filtros */
-        .filter-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-
-        .filter-button {
-            padding: 8px 15px;
-            border: 1px solid var(--filter-border-color);
-            background-color: var(--filter-bg-color);
-            color: var(--filter-text-color);
-            font-size: 13px;
-            font-weight: 500;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-button:hover {
-            background-color: #e9ecef;
-            border-color: #adb5bd;
-            transform: translateY(-2px);
-        }
-        
-        body.dark-mode .filter-button:hover {
-            background-color: #444;
-            border-color: #666;
-        }
-
-        /* Container da barra de pesquisa */
-        .search-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        #searchInput {
-            flex-grow: 1;
-            padding: 12px;
-            border: 1px solid var(--input-border-color);
-            background-color: var(--input-bg-color);
-            color: var(--text-color);
-            border-radius: 8px;
-            font-size: 16px;
-            outline: none;
-        }
-        
-        #searchButton {
-            padding: 12px 20px;
-            border: none;
-            background: linear-gradient(45deg, #3498db, #2980b9);
-            color: white;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .loader {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 30px auto;
-        }
-        
-        /* Container da Curiosidade */
-        .curiosity-container {
-            text-align: left;
-            margin-top: 20px;
-            padding: 20px;
-            border: 1px dashed var(--curiosity-border-color);
-            border-radius: 8px;
-            background-color: var(--curiosity-bg-color);
-            transition: background-color 0.3s ease;
-        }
-        .curiosity-container h3 {
-            text-align: center;
-            color: var(--curiosity-title-color);
-            margin-top: 0;
-            font-family: 'Merriweather', serif;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Media Queries para Responsividade */
-        /* Tablets e Celulares Maiores (até 768px) */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            main {
-                padding: 20px 15px;
-                margin-top: 10px;
-            }
-            .book {
-                height: 70vh; /* Mais alto para aproveitar o espaço vertical */
-            }
-            h1 {
-                font-size: 1.8rem;
-            }
-            .page-content {
-                font-size: 15px; /* Ligeiramente maior para legibilidade */
-            }
-            #themeToggleBtn {
-                top: 10px;
-                right: 10px;
-            }
-        }
-
-        /* Celulares Pequenos (até 480px) */
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-            .search-container {
-                flex-direction: column; /* Empilha a busca na vertical */
-            }
-            .book-navigation {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .nav-button {
-                width: 100%;
-            }
-            /* Inverte a ordem para que o seletor de página fique no meio */
-            #pageSelectorContainer {
-                order: -1;
-            }
-            .filter-button {
-                font-size: 11px;
-                padding: 5px 10px;
-            }
-        }
-
     </style>
 </head>
-<body>
+<body class="flex items-center justify-center min-h-screen p-4">
 
-    <main>
-        <button id="themeToggleBtn">🌙</button>
-        <h1>Pequeno Gênio</h1>
-        <p>Descubra histórias fascinantes sobre qualquer tópico, como se estivesse a ler um livro.</p>
+    <!-- Efeito de vidro fosco com opacidade e backdrop-blur -->
+    <div class="w-full max-w-md mx-auto bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl shadow-indigo-100/50 p-8 space-y-6">
         
-        <div class="filter-container">
-            <button class="filter-button" data-topic="Brasil">Países</button>
-            <button class="filter-button" data-topic="Cleópatra">Figuras Históricas</button>
-            <button class="filter-button" data-topic="Revolução Industrial">Acontecimentos Históricos</button>
-            <button class="filter-button" data-topic="Inteligência artificial">Ciência e Tecnologia</button>
-            <button class="filter-button" data-topic="Renascimento">Arte e Cultura</button>
-            <button class="filter-button" data-topic="Tubarão-branco">Natureza</button>
+        <!-- Cabeçalho -->
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-indigo-600">PORCENTAGEM CALCULATER</h1>
+            <p class="text-slate-500 mt-2">Calcule acréscimos, descontos e mais.</p>
         </div>
 
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Ex: Antigo Egito, Leonardo da Vinci...">
-            <button id="searchButton">Pesquisar</button>
-        </div>
-
-        <div id="loader" class="loader" style="display: none;"></div>
-        
-        <div id="bookContainer" class="book-container" style="display: none;">
-            <div class="book">
-                <div id="bookPagesContainer"></div>
+        <!-- Formulário de Entrada -->
+        <div class="space-y-4">
+            <div>
+                <label for="valorInicial" class="text-sm font-medium text-slate-600 block mb-2">Valor Original (R$)</label>
+                <input type="number" id="valorInicial" placeholder="Ex: 1500,00" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 border-l-4 border-l-blue-500">
             </div>
-            <div class="book-navigation">
-                <button id="prevPageBtn" class="nav-button">Anterior</button>
-                <div id="pageSelectorContainer">
-                    <span>Página </span>
-                    <select id="pageSelector"></select>
-                    <span id="totalPagesLabel">de 1</span>
-                </div>
-                <button id="nextPageBtn" class="nav-button">Próximo</button>
+            <div>
+                <label for="porcentagem" class="text-sm font-medium text-slate-600 block mb-2">Porcentagem (%)</label>
+                <input type="number" id="porcentagem" placeholder="Ex: 15" class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-200 border-l-4 border-l-red-500">
             </div>
         </div>
-        
-        <div id="curiosityContainer" class="curiosity-container" style="display: none;"></div>
-    </main>
+
+        <!-- Seleção de Operação -->
+        <div class="space-y-3">
+            <label class="text-sm font-medium text-slate-600 block">Escolha a operação</label>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <label for="opAdicionar" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition">
+                    <input id="opAdicionar" name="operacao" type="radio" value="adicionar" checked class="custom-radio h-5 w-5 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                    <span class="ml-3 text-sm font-medium text-slate-700">Acréscimo</span>
+                </label>
+                <label for="opSubtrair" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition">
+                    <input id="opSubtrair" name="operacao" type="radio" value="subtrair" class="custom-radio h-5 w-5 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                    <span class="ml-3 text-sm font-medium text-slate-700">Desconto</span>
+                </label>
+                 <label for="opMultiplicar" class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition">
+                    <input id="opMultiplicar" name="operacao" type="radio" value="multiplicar" class="custom-radio h-5 w-5 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                    <span class="ml-3 text-sm font-medium text-slate-700">Total da %</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Botão Limpar -->
+        <div class="pt-2">
+            <button id="limparBtn" class="w-full py-3 px-4 bg-slate-500 hover:bg-slate-600 text-white font-semibold rounded-lg shadow-md transition duration-200 ease-in-out flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z"/>
+                  <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466"/>
+                </svg>
+                <span>Limpar Tudo</span>
+            </button>
+        </div>
+
+
+        <!-- Seção de Resultados -->
+        <div id="resultado" class="bg-indigo-50/80 border-l-4 border-indigo-500 rounded-r-lg p-6 space-y-4 hidden">
+             <!-- O conteúdo do resultado será inserido aqui pelo JavaScript -->
+        </div>
+
+        <!-- Mensagem de Erro -->
+        <div id="erro" class="bg-red-50/80 text-red-700 border border-red-200 rounded-lg p-4 text-center hidden">
+            Por favor, insira valores válidos em ambos os campos.
+        </div>
+    </div>
 
     <script>
-        // --- ELEMENTOS DO DOM ---
-        const searchInput = document.getElementById('searchInput');
-        const searchButton = document.getElementById('searchButton');
-        const loader = document.getElementById('loader');
-        const filterButtons = document.querySelectorAll('.filter-button');
-        const themeToggleBtn = document.getElementById('themeToggleBtn');
-        const body = document.body;
-        
-        // Elementos do Livro
-        const bookContainer = document.getElementById('bookContainer');
-        const bookPagesContainer = document.getElementById('bookPagesContainer');
-        const prevPageBtn = document.getElementById('prevPageBtn');
-        const nextPageBtn = document.getElementById('nextPageBtn');
-        const pageSelector = document.getElementById('pageSelector');
-        const totalPagesLabel = document.getElementById('totalPagesLabel');
-        const curiosityContainer = document.getElementById('curiosityContainer');
-        
-        // --- ESTADO DA APLICAÇÃO ---
-        let currentTopicTitle = '';
-        let pages = [];
-        let currentPageIndex = 0;
-        let imageUrl = '';
-        const randomTopics = ["Brasil", "Cleópatra", "Revolução Industrial", "Inteligência artificial", "Renascimento", "Tubarão-branco", "Albert Einstein", "Buraco Negro", "Império Romano", "Leonardo da Vinci"];
+        // Selecionando os elementos do HTML
+        const inputValorInicial = document.getElementById('valorInicial');
+        const inputPorcentagem = document.getElementById('porcentagem');
+        const radiosOperacao = document.querySelectorAll('input[name="operacao"]');
+        const divResultado = document.getElementById('resultado');
+        const divErro = document.getElementById('erro');
+        const btnLimpar = document.getElementById('limparBtn');
 
-        // --- OUVINTES DE EVENTOS ---
-        document.addEventListener('DOMContentLoaded', () => {
-            applyInitialTheme();
-            fetchRandomCuriosityOnLoad();
-        });
-        
-        themeToggleBtn.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            let theme = 'light';
-            if (body.classList.contains('dark-mode')) {
-                theme = 'dark';
-                themeToggleBtn.textContent = '☀️';
-            } else {
-                themeToggleBtn.textContent = '🌙';
-            }
-            localStorage.setItem('theme', theme);
-        });
-
-        searchButton.addEventListener('click', fetchStory);
-        searchInput.addEventListener('keypress', (e) => e.key === 'Enter' && fetchStory());
-        prevPageBtn.addEventListener('click', showPrevPage);
-        nextPageBtn.addEventListener('click', showNextPage);
-        pageSelector.addEventListener('change', selectPage);
-
-        document.addEventListener('keydown', (e) => {
-            if (bookContainer.style.display === 'block') {
-                if (e.key === 'ArrowLeft') {
-                    showPrevPage();
-                } else if (e.key === 'ArrowRight') {
-                    showNextPage();
-                }
-            }
-        });
-
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                searchInput.value = button.dataset.topic;
-                fetchStory();
-            });
-        });
-        
-        function selectPage() {
-            currentPageIndex = parseInt(this.value, 10);
-            updatePageView();
-        }
-
-        // --- FUNÇÕES DE PAGINAÇÃO ---
-        function paginateText(text) {
-            const wordsPerPage = 200; 
-            const paragraphs = text.split('<br><br>');
-            let tempPages = [];
-            let currentPage = '';
-
-            paragraphs.forEach(p => {
-                if (!p) return;
-                const wordsInParagraph = p.split(/\s+/).length;
-                const wordsInCurrentPage = currentPage.split(/\s+/).length;
-
-                if (currentPage && (wordsInCurrentPage + wordsInParagraph) > wordsPerPage) {
-                    tempPages.push(currentPage.trim());
-                    currentPage = p;
+        // Função para destacar a opção de operação selecionada
+        function updateRadioStyles() {
+            radiosOperacao.forEach(radio => {
+                if (radio.checked) {
+                    radio.parentElement.classList.add('selected-radio');
                 } else {
-                    currentPage += (currentPage ? '<br><br>' : '') + p;
+                    radio.parentElement.classList.remove('selected-radio');
                 }
             });
-            if (currentPage) tempPages.push(currentPage.trim());
-            
-            pages = tempPages.length > 0 ? tempPages : ["Não foi encontrado conteúdo para este tópico."];
         }
 
-        function displayPages() {
-            bookPagesContainer.innerHTML = '';
-            
-            const firstPageContent = `<img class="topic-image" src="${imageUrl}" alt="Imagem de ${currentTopicTitle}" style="${imageUrl ? 'display:block;' : 'display:none;'}"><div class="page-content">${pages[0]}</div>`;
-            bookPagesContainer.innerHTML += `<div class="page" id="page-0">${firstPageContent}</div>`;
-            
-            for (let i = 1; i < pages.length; i++) {
-                bookPagesContainer.innerHTML += `<div class="page" id="page-${i}"><div class="page-content">${pages[i]}</div></div>`;
-            }
-            
-            pageSelector.innerHTML = '';
-            pages.forEach((_, i) => {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i + 1;
-                pageSelector.appendChild(option);
+        // Função para formatar números como moeda brasileira (BRL)
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
             });
-
-            currentPageIndex = Math.min(currentPageIndex, pages.length - 1);
-            updatePageView();
-        }
-        
-        function updatePageView() {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            
-            const currentPageElement = document.getElementById(`page-${currentPageIndex}`);
-            if (currentPageElement) currentPageElement.classList.add('active');
-            
-            pageSelector.value = currentPageIndex;
-            totalPagesLabel.textContent = `de ${pages.length}`;
-            prevPageBtn.disabled = currentPageIndex === 0;
-            nextPageBtn.disabled = currentPageIndex === pages.length - 1;
         }
 
-        function showPrevPage() {
-            if (currentPageIndex > 0) {
-                currentPageIndex--;
-                updatePageView();
-            }
+        // Função para limpar todos os campos
+        function limparTudo() {
+            inputValorInicial.value = '';
+            inputPorcentagem.value = '';
+            divResultado.classList.add('hidden');
+            divErro.classList.add('hidden');
+            document.getElementById('opAdicionar').checked = true; // Reseta para a primeira opção
+            updateRadioStyles(); // Atualiza o estilo dos botões de rádio
+            inputValorInicial.focus(); // Coloca o foco no primeiro campo
         }
 
-        function showNextPage() {
-            if (currentPageIndex < pages.length - 1) {
-                currentPageIndex++;
-                updatePageView();
-            }
-        }
-        
-        // --- FUNÇÕES PRINCIPAIS ---
-        function applyInitialTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                body.classList.add('dark-mode');
-                themeToggleBtn.textContent = '☀️';
-            } else {
-                body.classList.remove('dark-mode');
-                themeToggleBtn.textContent = '🌙';
-            }
-        }
+        // Função principal para calcular
+        function calcular() {
+            updateRadioStyles(); // Atualiza o estilo da seleção
 
-        async function fetchRandomCuriosityOnLoad() {
-            curiosityContainer.style.display = 'block';
-            curiosityContainer.innerHTML = '<h3>Você Sabia?</h3><div class="loader" style="margin: 10px auto; width: 20px; height: 20px;"></div>';
-            
-            try {
-                const randomTopic = randomTopics[Math.floor(Math.random() * randomTopics.length)];
-                const curiosityPrompt = `Conte-me uma curiosidade surpreendente ou um fato poco conhecido sobre "${randomTopic}". A resposta deve ser curta, direta e interessante, começando diretamente com o fato.`;
-                const curiosityResult = await callGeminiAPI(curiosityPrompt);
-                
-                curiosityContainer.innerHTML = `<h3>Você Sabia? (Tema: ${randomTopic})</h3><p>${curiosityResult}</p>`;
-            } catch (error) {
-                console.error("Não foi possível gerar a curiosidade inicial:", error);
-                curiosityContainer.innerHTML = `<h3>Você Sabia?</h3><p>O mel é um dos poucos alimentos que nunca estraga. Arqueólogos já encontraram potes de mel em tumbas egípcias com mais de 3.000 anos que ainda estavam perfeitamente comestíveis.</p>`;
-            }
-        }
-        
-        async function fetchStory() {
-            const query = searchInput.value.trim();
-            if (!query) return;
+            // Pegando os valores dos inputs e convertendo para número
+            const valorInicial = parseFloat(inputValorInicial.value);
+            const porcentagem = parseFloat(inputPorcentagem.value);
 
-            loader.style.display = 'block';
-            bookContainer.style.display = 'none';
-            curiosityContainer.style.display = 'none';
-            searchButton.disabled = true;
-            imageUrl = '';
-
-            try {
-                const apiUrl = `https://pt.wikipedia.org/w/api.php?action=query&format=json&prop=extracts|pageimages&explaintext=true&redirects=1&origin=*&titles=${encodeURIComponent(query)}&pithumbsize=500`;
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-                const pageData = data.query.pages[Object.keys(data.query.pages)[0]];
-
-                if (pageData.missing) {
-                     paginateText(`Não foi possível encontrar resultados para "${query}".`);
+            // Verificando se os valores são números válidos
+            if (isNaN(valorInicial) || isNaN(porcentagem) || valorInicial < 0 || porcentagem < 0) {
+                // Se algum campo estiver vazio, não mostra erro, apenas esconde o resultado
+                if (!inputValorInicial.value || !inputPorcentagem.value) {
+                     divResultado.classList.add('hidden');
+                     divErro.classList.add('hidden');
                 } else {
-                    currentTopicTitle = pageData.title;
-                    if (pageData.thumbnail) imageUrl = pageData.thumbnail.source;
-                    
-                    const rawText = pageData.extract || 'Conteúdo não encontrado.';
-                    paginateText(rawText.replace(/\n/g, '<br><br>'));
-                    
-                    generateAndDisplayCuriosity();
+                     divErro.classList.remove('hidden'); // Mostra a mensagem de erro
+                     divResultado.classList.add('hidden'); // Esconde o resultado
                 }
-            } catch (error) {
-                console.error('Erro ao buscar na API da Wikipedia:', error);
-                paginateText('Ocorreu um erro de rede. Por favor, tente novamente.');
-            } finally {
-                loader.style.display = 'none';
-                bookContainer.style.display = 'block';
-                displayPages();
-                searchButton.disabled = false;
+                return; // Para a execução da função
             }
+
+            // Se os valores forem válidos, esconde o erro
+            divErro.classList.add('hidden');
+
+            const operacao = document.querySelector('input[name="operacao"]:checked').value;
+            const valorDoPercentual = (valorInicial * porcentagem) / 100;
+            let resultadoHtml = '';
+
+            switch (operacao) {
+                case 'adicionar':
+                    resultadoHtml = `
+                        <div class="flex justify-between items-center"><span class="text-slate-600">Valor Original:</span><span class="font-semibold text-slate-800 text-lg">${formatarMoeda(valorInicial)}</span></div>
+                        <div class="flex justify-between items-center"><span class="text-slate-600">Acréscimo de ${porcentagem}%:</span><span class="font-semibold text-green-600 text-lg">+ ${formatarMoeda(valorDoPercentual)}</span></div>
+                        <hr class="border-slate-200">
+                        <div class="flex justify-between items-center"><span class="font-bold text-slate-800 text-xl">Valor Final:</span><span class="font-bold text-indigo-600 text-2xl">${formatarMoeda(valorInicial + valorDoPercentual)}</span></div>
+                    `;
+                    break;
+                case 'subtrair':
+                     resultadoHtml = `
+                        <div class="flex justify-between items-center"><span class="text-slate-600">Valor Original:</span><span class="font-semibold text-slate-800 text-lg">${formatarMoeda(valorInicial)}</span></div>
+                        <div class="flex justify-between items-center"><span class="text-slate-600">Desconto de ${porcentagem}%:</span><span class="font-semibold text-red-600 text-lg">- ${formatarMoeda(valorDoPercentual)}</span></div>
+                        <hr class="border-slate-200">
+                        <div class="flex justify-between items-center"><span class="font-bold text-slate-800 text-xl">Valor Final:</span><span class="font-bold text-indigo-600 text-2xl">${formatarMoeda(valorInicial - valorDoPercentual)}</span></div>
+                    `;
+                    break;
+                case 'multiplicar':
+                    resultadoHtml = `
+                        <div class="flex justify-between items-center"><span class="text-slate-600">${porcentagem}% de:</span><span class="font-semibold text-slate-800 text-lg">${formatarMoeda(valorInicial)}</span></div>
+                        <hr class="border-slate-200">
+                        <div class="flex justify-between items-center"><span class="font-bold text-slate-800 text-xl">Resultado:</span><span class="font-bold text-indigo-600 text-2xl">${formatarMoeda(valorDoPercentual)}</span></div>
+                    `;
+                    break;
+            }
+
+            divResultado.innerHTML = resultadoHtml;
+            divResultado.classList.remove('hidden');
         }
 
-        async function generateAndDisplayCuriosity() {
-            curiosityContainer.style.display = 'block';
-            curiosityContainer.innerHTML = '<div class="loader" style="margin: 10px auto; width: 20px; height: 20px;"></div>';
+        // Adicionando "escutadores" de eventos
+        inputValorInicial.addEventListener('input', calcular);
+        inputPorcentagem.addEventListener('input', calcular);
+        radiosOperacao.forEach(radio => radio.addEventListener('change', calcular));
+        btnLimpar.addEventListener('click', limparTudo);
 
-            try {
-                const curiosityPrompt = `Por favor, gere uma curiosidade diferente e surpreendente sobre "${currentTopicTitle}". Tente evitar fatos muito comuns.`;
-                const curiosityResult = await callGeminiAPI(curiosityPrompt);
-                
-                curiosityContainer.innerHTML = `<h3>Você Sabia?</h3><p>${curiosityResult}</p>`;
-
-            } catch (error) {
-                console.error("Não foi possível gerar a curiosidade:", error);
-                curiosityContainer.style.display = 'none';
+        // Adicionando funcionalidade para a tecla "Enter"
+        inputValorInicial.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Impede o comportamento padrão (como submeter um formulário)
+                inputPorcentagem.focus(); // Move o foco para o próximo campo
             }
-        }
+        });
 
-        async function callGeminiAPI(promptText) {
-            const apiKey = ""; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-            const payload = { contents: [{ parts: [{ text: promptText }] }] };
-
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            if (!response.ok) {
-                const errorBody = await response.json().catch(() => ({}));
-                throw new Error(errorBody?.error?.message || `Erro ${response.status}`);
+        inputPorcentagem.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                calcular(); // Executa o cálculo
+                inputPorcentagem.blur(); // Opcional: remove o foco do campo
             }
+        });
+        
+        // Chamar para definir o estilo inicial quando a página carregar
+        updateRadioStyles();
 
-            const result = await response.json();
-            const candidate = result.candidates?.[0];
-
-            if (candidate?.content?.parts?.[0]?.text) {
-                return candidate.content.parts[0].text;
-            } else {
-                throw new Error("A API retornou uma resposta vazia ou malformada.");
-            }
-        }
     </script>
-
 </body>
 </html>
+
 
