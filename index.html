@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pequeno Gênio</title>
+    
+    <!-- CSS incorporado para estilizar a página -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+
+        /* --- VARIÁVEIS DE COR PARA TEMAS --- */
+        :root {
+            --body-bg-image: url('https://images.pexels.com/photos/694740/pexels-photo-694740.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            --body-bg-color: #f0f2f5;
+            --main-bg-color: #ffffff;
+            --text-color: #333;
+            --title-color: #2c3e50;
+            --page-bg-color: #fff;
+            --page-border-color: #ddd;
+            --page-content-color: #34495e;
+            --filter-bg-color: #f8f9fa;
+            --filter-border-color: #ced4da;
+            --filter-text-color: #495057;
+            --input-bg-color: #fff;
+            --input-border-color: #bdc3c7;
+            --curiosity-bg-color: #eaf5ff;
+            --curiosity-border-color: #3498db;
+            --curiosity-title-color: #2980b9;
+            --toggle-border-color: #ddd;
+            --toggle-icon-color: #2c3e50;
+            --toggle-hover-bg: #f0f0f0;
+        }
+
+        body.dark-mode {
+            --body-bg-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg');
+            --body-bg-color: #121212;
+            --main-bg-color: rgba(30, 30, 30, 0.9); /* Fundo semi-transparente */
+            --text-color: #e0e0e0;
+            --title-color: #ffffff;
+            --page-bg-color: #2a2a2a;
+            --page-border-color: #444;
+            --page-content-color: #cccccc;
+            --filter-bg-color: #333;
+            --filter-border-color: #555;
+            --filter-text-color: #ccc;
+            --input-bg-color: #333;
+            --input-border-color: #555;
+            --curiosity-bg-color: #2c3e50;
+            --curiosity-border-color: #3498db;
+            --curiosity-title-color: #eaf5ff;
+            --toggle-border-color: #555;
+            --toggle-icon-color: #f0f0f0;
+            --toggle-hover-bg: #333;
+        }
+
+        /* Estilos gerais do corpo da página */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-image: var(--body-bg-image);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: var(--body-bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Container principal */
+        main {
+            background-color: var(--main-bg-color);
+            color: var(--text-color);
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1100px;
+            text-align: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin-top: 20px;
+            position: relative;
+        }
+        
+        #themeToggleBtn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: 1px solid var(--toggle-border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--toggle-icon-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #themeToggleBtn:hover {
+            background-color: var(--toggle-hover-bg);
+        }
+
+        /* Título principal */
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--title-color);
+            margin-bottom: 10px;
+        }
+        
+        /* --- ESTILOS DO LIVRO --- */
+        .book-container {
+            margin-top: 20px;
+            perspective: 2500px;
+        }
+
+        .book {
+            width: 100%;
+            height: 65vh;
+            max-height: 550px;
+            position: relative;
+            transition: transform 0.5s;
+        }
+
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--page-bg-color);
+            padding: 20px;
+            box-sizing: border-box;
+            border: 1px solid var(--page-border-color);
+            display: none;
+            flex-direction: column;
+            overflow-y: auto;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .page.active { display: flex; }
+        
+        .page-content {
+            font-size: 16px;
+            line-height: 1.7;
+            text-align: justify;
+            color: var(--page-content-color);
+        }
+
+        .topic-image {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 0 auto 20px auto;
+            display: block;
+        }
+
+        .book-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .nav-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .nav-button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        #pageSelectorContainer {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        #pageSelector {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px;
+            background-color: var(--input-bg-color);
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        /* Container dos filtros */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .filter-button {
+            padding: 8px 15px;
+            border: 1px solid var(--filter-border-color);
+            background-color: var(--filter-bg-color);
+            color: var(--filter-text-color);
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-button:hover {
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+            transform: translateY(-2px);
+        }
+        
+        body.dark-mode .filter-button:hover {
+            background-color: #444;
+            border-color: #666;
+        }
+
+        /* Container da barra de pesquisa */
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        #searchInput {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid var(--input-border-color);
+            background-color: var(--input-bg-color);
+            color: var(--text-color);
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        #searchButton {
+            padding: 12px 20px;
+            border: none;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 30px auto;
+        }
+        
+        /* Container da Curiosidade */
+        .curiosity-container {
+            text-align: left;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px dashed var(--curiosity-border-color);
+            border-radius: 8px;
+            background-color: var(--curiosity-bg-color);
+            transition: background-color 0.3s ease;
+        }
+        .curiosity-container h3 {
+            text-align: center;
+            color: var(--curiosity-title-color);
+            margin-top: 0;
+            font-family: 'Merriweather', serif;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Media Queries para Responsividade */
+        /* Tablets e Celulares Maiores (até 768px) */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            main {
+                padding: 20px 15px;
+                margin-top: 10px;
+            }
+            .book {
+                height: 70vh; /* Mais alto para aproveitar o espaço vertical */
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            .page-content {
+                font-size: 15px; /* Ligeiramente maior para legibilidade */
+            }
+            #themeToggleBtn {
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        /* Celulares Pequenos (até 480px) */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            .search-container {
+                flex-direction: column; /* Empilha a busca na vertical */
+            }
+            .book-navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .nav-button {
+                width: 100%;
+            }
+            /* Inverte a ordem para que o seletor de página fique no meio */
+            #pageSelectorContainer {
+                order: -1;
+            }
+            .filter-button {
+                font-size: 11px;
+                padding: 5px 10px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <main>
+        <button id="themeToggleBtn">🌙</button>
+        <h1>Pequeno Gênio</h1>
+        <p>Descubra histórias fascinantes sobre qualquer tópico, como se estivesse a ler um livro.</p>
+        
+        <div class="filter-container">
+            <button class="filter-button" data-topic="Brasil">Países</button>
+            <button class="filter-button" data-topic="Cleópatra">Figuras Históricas</button>
+            <button class="filter-button" data-topic="Revolução Industrial">Acontecimentos Históricos</button>
+            <button class="filter-button" data-topic="Inteligência artificial">Ciência e Tecnologia</button>
+            <button class="filter-button" data-topic="Renascimento">Arte e Cultura</button>
+            <button class="filter-button" data-topic="Tubarão-branco">Natureza</button>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Ex: Antigo Egito, Leonardo da Vinci...">
+            <button id="searchButton">Pesquisar</button>
+        </div>
+
+        <div id="loader" class="loader" style="display: none;"></div>
+        
+        <div id="bookContainer" class="book-container" style="display: none;">
+            <div class="book">
+                <div id="bookPagesContainer"></div>
+            </div>
+            <div class="book-navigation">
+                <button id="prevPageBtn" class="nav-button">Anterior</button>
+                <div id="pageSelectorContainer">
+                    <span>Página </span>
+                    <select id="pageSelector"></select>
+                    <span id="totalPagesLabel">de 1</span>
+                </div>
+                <button id="nextPageBtn" class="nav-button">Próximo</button>
+            </div>
+        </div>
+        
+        <div id="curiosityContainer" class="curiosity-container" style="display: none;"></div>
+    </main>
+
+    <script>
+        // --- ELEMENTOS DO DOM ---
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const loader = document.getElementById('loader');
+        const filterButtons = document.querySelectorAll('.filter-button');
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const body = document.body;
+        
+        // Elementos do Livro
+        const bookContainer = document.getElementById('bookContainer');
+        const bookPagesContainer = document.getElementById('bookPagesContainer');
+        const prevPageBtn = document.getElementById('prevPageBtn');
+        const nextPageBtn = document.getElementById('nextPageBtn');
+        const pageSelector = document.getElementById('pageSelector');
+        const totalPagesLabel = document.getElementById('totalPagesLabel');
+        const curiosityContainer = document.getElementById('curiosityContainer');
+        
+        // --- ESTADO DA APLICAÇÃO ---
+        let currentTopicTitle = '';
+        let pages = [];
+        let currentPageIndex = 0;
+        let imageUrl = '';
+        const randomTopics = ["Brasil", "Cleópatra", "Revolução Industrial", "Inteligência artificial", "Renascimento", "Tubarão-branco", "Albert Einstein", "Buraco Negro", "Império Romano", "Leonardo da Vinci"];
+
+        // --- OUVINTES DE EVENTOS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            applyInitialTheme();
+            fetchRandomCuriosityOnLoad();
+        });
+        
+        themeToggleBtn.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            let theme = 'light';
+            if (body.classList.contains('dark-mode')) {
+                theme = 'dark';
+                themeToggleBtn.textContent = '☀️';
+            } else {
+                themeToggleBtn.textContent = '🌙';
+            }
+            localStorage.setItem('theme', theme);
+        });
+
+        searchButton.addEventListener('click', fetchStory);
+        searchInput.addEventListener('keypress', (e) => e.key === 'Enter' && fetchStory());
+        prevPageBtn.addEventListener('click', showPrevPage);
+        nextPageBtn.addEventListener('click', showNextPage);
+        pageSelector.addEventListener('change', selectPage);
+
+        document.addEventListener('keydown', (e) => {
+            if (bookContainer.style.display === 'block') {
+                if (e.key === 'ArrowLeft') {
+                    showPrevPage();
+                } else if (e.key === 'ArrowRight') {
+                    showNextPage();
+                }
+            }
+        });
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                searchInput.value = button.dataset.topic;
+                fetchStory();
+            });
+        });
+        
+        function selectPage() {
+            currentPageIndex = parseInt(this.value, 10);
+            updatePageView();
+        }
+
+        // --- FUNÇÕES DE PAGINAÇÃO ---
+        function paginateText(text) {
+            const wordsPerPage = 200; 
+            const paragraphs = text.split('<br><br>');
+            let tempPages = [];
+            let currentPage = '';
+
+            paragraphs.forEach(p => {
+                if (!p) return;
+                const wordsInParagraph = p.split(/\s+/).length;
+                const wordsInCurrentPage = currentPage.split(/\s+/).length;
+
+                if (currentPage && (wordsInCurrentPage + wordsInParagraph) > wordsPerPage) {
+                    tempPages.push(currentPage.trim());
+                    currentPage = p;
+                } else {
+                    currentPage += (currentPage ? '<br><br>' : '') + p;
+                }
+            });
+            if (currentPage) tempPages.push(currentPage.trim());
+            
+            pages = tempPages.length > 0 ? tempPages : ["Não foi encontrado conteúdo para este tópico."];
+        }
+
+        function displayPages() {
+            bookPagesContainer.innerHTML = '';
+            
+            const firstPageContent = `<img class="topic-image" src="${imageUrl}" alt="Imagem de ${currentTopicTitle}" style="${imageUrl ? 'display:block;' : 'display:none;'}"><div class="page-content">${pages[0]}</div>`;
+            bookPagesContainer.innerHTML += `<div class="page" id="page-0">${firstPageContent}</div>`;
+            
+            for (let i = 1; i < pages.length; i++) {
+                bookPagesContainer.innerHTML += `<div class="page" id="page-${i}"><div class="page-content">${pages[i]}</div></div>`;
+            }
+            
+            pageSelector.innerHTML = '';
+            pages.forEach((_, i) => {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i + 1;
+                pageSelector.appendChild(option);
+            });
+
+            currentPageIndex = Math.min(currentPageIndex, pages.length - 1);
+            updatePageView();
+        }
+        
+        function updatePageView() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            
+            const currentPageElement = document.getElementById(`page-${currentPageIndex}`);
+            if (currentPageElement) currentPageElement.classList.add('active');
+            
+            pageSelector.value = currentPageIndex;
+            totalPagesLabel.textContent = `de ${pages.length}`;
+            prevPageBtn.disabled = currentPageIndex === 0;
+            nextPageBtn.disabled = currentPageIndex === pages.length - 1;
+        }
+
+        function showPrevPage() {
+            if (currentPageIndex > 0) {
+                currentPageIndex--;
+                updatePageView();
+            }
+        }
+
+        function showNextPage() {
+            if (currentPageIndex < pages.length - 1) {
+                currentPageIndex++;
+                updatePageView();
+            }
+        }
+        
+        // --- FUNÇÕES PRINCIPAIS ---
+        function applyInitialTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.classList.add('dark-mode');
+                themeToggleBtn.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                themeToggleBtn.textContent = '🌙';
+            }
+        }
+
+        async function fetchRandomCuriosityOnLoad() {
+            curiosityContainer.style.display = 'block';
+            curiosityContainer.innerHTML = '<h3>Você Sabia?</h3><div class="loader" style="margin: 10px auto; width: 20px; height: 20px;"></div>';
+            
+            try {
+                const randomTopic = randomTopics[Math.floor(Math.random() * randomTopics.length)];
+                const curiosityPrompt = `Conte-me uma curiosidade surpreendente ou um fato poco conhecido sobre "${randomTopic}". A resposta deve ser curta, direta e interessante, começando diretamente com o fato.`;
+                const curiosityResult = await callGeminiAPI(curiosityPrompt);
+                
+                curiosityContainer.innerHTML = `<h3>Você Sabia? (Tema: ${randomTopic})</h3><p>${curiosityResult}</p>`;
+            } catch (error) {
+                console.error("Não foi possível gerar a curiosidade inicial:", error);
+                curiosityContainer.innerHTML = `<h3>Você Sabia?</h3><p>O mel é um dos poucos alimentos que nunca estraga. Arqueólogos já encontraram potes de mel em tumbas egípcias com mais de 3.000 anos que ainda estavam perfeitamente comestíveis.</p>`;
+            }
+        }
+        
+        async function fetchStory() {
+            const query = searchInput.value.trim();
+            if (!query) return;
+
+            loader.style.display = 'block';
+            bookContainer.style.display = 'none';
+            curiosityContainer.style.display = 'none';
+            searchButton.disabled = true;
+            imageUrl = '';
+
+            try {
+                const apiUrl = `https://pt.wikipedia.org/w/api.php?action=query&format=json&prop=extracts|pageimages&explaintext=true&redirects=1&origin=*&titles=${encodeURIComponent(query)}&pithumbsize=500`;
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                const pageData = data.query.pages[Object.keys(data.query.pages)[0]];
+
+                if (pageData.missing) {
+                     paginateText(`Não foi possível encontrar resultados para "${query}".`);
+                } else {
+                    currentTopicTitle = pageData.title;
+                    if (pageData.thumbnail) imageUrl = pageData.thumbnail.source;
+                    
+                    const rawText = pageData.extract || 'Conteúdo não encontrado.';
+                    paginateText(rawText.replace(/\n/g, '<br><br>'));
+                    
+                    generateAndDisplayCuriosity();
+                }
+            } catch (error) {
+                console.error('Erro ao buscar na API da Wikipedia:', error);
+                paginateText('Ocorreu um erro de rede. Por favor, tente novamente.');
+            } finally {
+                loader.style.display = 'none';
+                bookContainer.style.display = 'block';
+                displayPages();
+                searchButton.disabled = false;
+            }
+        }
+
+        async function generateAndDisplayCuriosity() {
+            curiosityContainer.style.display = 'block';
+            curiosityContainer.innerHTML = '<div class="loader" style="margin: 10px auto; width: 20px; height: 20px;"></div>';
+
+            try {
+                const curiosityPrompt = `Por favor, gere uma curiosidade diferente e surpreendente sobre "${currentTopicTitle}". Tente evitar fatos muito comuns.`;
+                const curiosityResult = await callGeminiAPI(curiosityPrompt);
+                
+                curiosityContainer.innerHTML = `<h3>Você Sabia?</h3><p>${curiosityResult}</p>`;
+
+            } catch (error) {
+                console.error("Não foi possível gerar a curiosidade:", error);
+                curiosityContainer.style.display = 'none';
+            }
+        }
+
+        async function callGeminiAPI(promptText) {
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const payload = { contents: [{ parts: [{ text: promptText }] }] };
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorBody = await response.json().catch(() => ({}));
+                throw new Error(errorBody?.error?.message || `Erro ${response.status}`);
+            }
+
+            const result = await response.json();
+            const candidate = result.candidates?.[0];
+
+            if (candidate?.content?.parts?.[0]?.text) {
+                return candidate.content.parts[0].text;
+            } else {
+                throw new Error("A API retornou uma resposta vazia ou malformada.");
+            }
+        }
+    </script>
+
+</body>
+</html>
+
