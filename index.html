@@ -44,9 +44,10 @@
         /* Periodic table grid layout */
         .periodic-table-grid {
             display: grid;
-            grid-template-columns: repeat(18, 1fr);
+            grid-template-columns: repeat(18, minmax(0, 1fr));
             gap: 4px;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
         }
         .element-cell {
             position: relative;
@@ -91,11 +92,12 @@
         }
         .lanthanide-container, .actinide-container {
             display: grid;
-            grid-template-columns: repeat(15, 1fr);
+            grid-template-columns: repeat(15, minmax(0, 1fr));
             gap: 4px;
             margin-top: 1rem;
             font-size: 0.65rem;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
         }
     </style>
 </head>
