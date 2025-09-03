@@ -1,787 +1,2176 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pequeno Gênio</title>
-    
-    <!-- CSS incorporado para estilizar a página -->
+    <title>Pequena Ajuda</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX for LaTeX Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" xintegrity="sha384-n8MVd4RsNIU0KOVEMeaPoAbJNdFBsSLMJiTsvpgJV+a1xRRiF78kBOAOkex4IILw" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" xintegrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
-
-        /* --- VARIÁVEIS DE COR PARA TEMAS --- */
-        :root {
-            --body-bg-image: url('https://images.pexels.com/photos/694740/pexels-photo-694740.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
-            --body-bg-color: #f0f2f5;
-            --main-bg-color: rgba(255, 255, 255, 0.95); /* Semi-transparente */
-            --text-color: #333;
-            --title-color: #2c3e50;
-            --page-bg-color: #fff;
-            --page-border-color: #ddd;
-            --page-content-color: #34495e;
-            --filter-bg-color: #f8f9fa;
-            --filter-border-color: #ced4da;
-            --filter-text-color: #495057;
-            --input-bg-color: #fff;
-            --input-border-color: #bdc3c7;
-            --curiosity-bg-color: #eaf5ff;
-            --curiosity-border-color: #3498db;
-            --curiosity-title-color: #2980b9;
-            --toggle-border-color: #ddd;
-            --toggle-icon-color: #2c3e50;
-            --toggle-hover-bg: #f0f0f0;
-        }
-
-        body.dark-mode {
-            --body-bg-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg');
-            --body-bg-color: #121212;
-            --main-bg-color: rgba(30, 30, 30, 0.9); /* Fundo semi-transparente */
-            --text-color: #e0e0e0;
-            --title-color: #ffffff;
-            --page-bg-color: #2a2a2a;
-            --page-border-color: #444;
-            --page-content-color: #cccccc;
-            --filter-bg-color: #333;
-            --filter-border-color: #555;
-            --filter-text-color: #ccc;
-            --input-bg-color: #333;
-            --input-border-color: #555;
-            --curiosity-bg-color: #2c3e50;
-            --curiosity-border-color: #3498db;
-            --curiosity-title-color: #eaf5ff;
-            --toggle-border-color: #555;
-            --toggle-icon-color: #f0f0f0;
-            --toggle-hover-bg: #333;
-        }
-
-        /* Estilos gerais do corpo da página */
         body {
-            font-family: 'Roboto', sans-serif;
-            background-image: var(--body-bg-image);
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://images.pexels.com/photos/5428260/pexels-photo-5428260.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            background-color: var(--body-bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-            transition: background-color 0.3s ease, background-image 0.5s ease-in-out;
         }
-
-        /* Container principal */
-        main {
-            background-color: var(--main-bg-color);
-            color: var(--text-color);
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 1100px;
-            text-align: center;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            margin-top: 20px;
-            position: relative;
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        
-        #themeToggleBtn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: 1px solid var(--toggle-border-color);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: var(--toggle-icon-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
         }
-        #themeToggleBtn:hover {
-            background-color: var(--toggle-hover-bg);
-        }
-
-        /* Título principal */
-        h1 {
-            font-family: 'Playfair Display', serif;
-            color: var(--title-color);
-            margin-bottom: 10px;
-        }
-        
-        /* --- ESTILOS DO LIVRO --- */
-        .book-container {
-            margin-top: 20px;
-            perspective: 2500px;
-        }
-
-        .book {
-            width: 100%;
-            height: 65vh;
-            max-height: 550px;
-            position: relative;
-            transition: transform 0.5s;
-        }
-
-        .page {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: var(--page-bg-color);
-            padding: 20px;
-            box-sizing: border-box;
-            border: 1px solid var(--page-border-color);
-            display: none;
-            flex-direction: column;
-            overflow-y: auto;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-        
-        .page.active { display: flex; }
-        
-        .page-content {
-            font-size: 16px;
-            line-height: 1.7;
-            text-align: justify;
-            color: var(--page-content-color);
-        }
-
-        .topic-image {
-            width: 100%;
-            max-height: 300px;
-            object-fit: contain;
-            border-radius: 8px;
-            margin: 0 auto 20px auto;
-            display: block;
-            cursor: pointer;
-        }
-
-        .book-navigation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
-        
-        .nav-button {
-            padding: 10px 20px;
-            border: none;
-            background-color: #3498db;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .nav-button:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-        }
-        
-        #pageSelectorContainer {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 14px;
-            color: #7f8c8d;
-        }
-
-        #pageSelector {
-            border: 1px solid #ccc;
+        ::-webkit-scrollbar-thumb {
+            background: #888;
             border-radius: 4px;
-            padding: 5px;
-            background-color: var(--input-bg-color);
-            color: var(--text-color);
-            cursor: pointer;
         }
-
-        /* Container dos filtros */
-        .filter-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 25px;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
-
-        .filter-button {
-            padding: 8px 15px;
-            border: 1px solid var(--filter-border-color);
-            background-color: var(--filter-bg-color);
-            color: var(--filter-text-color);
-            font-size: 13px;
-            font-weight: 500;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        /* Style for KaTeX rendered formulas */
+        .katex {
+            font-size: 1.1em !important;
         }
-
-        .filter-button:hover {
-            background-color: #e9ecef;
-            border-color: #adb5bd;
-            transform: translateY(-2px);
+        /* Periodic table grid layout */
+        .periodic-table-grid {
+            display: grid;
+            grid-template-columns: repeat(18, 1fr);
+            gap: 4px;
+            overflow-x: auto;
         }
-        
-        body.dark-mode .filter-button:hover {
-            background-color: #444;
-            border-color: #666;
-        }
-
-        /* Container da barra de pesquisa */
-        .search-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        #searchInput {
-            flex-grow: 1;
-            padding: 12px;
-            border: 1px solid var(--input-border-color);
-            background-color: var(--input-bg-color);
-            color: var(--text-color);
-            border-radius: 8px;
-            font-size: 16px;
-            outline: none;
-        }
-        
-        #searchButton {
-            padding: 12px 20px;
-            border: none;
-            background: linear-gradient(45deg, #3498db, #2980b9);
-            color: white;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        
-        /* Botões de Ação */
-        #actionButtons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .action-button {
-            padding: 10px 20px;
-            border: 1px solid #3498db;
-            background-color: var(--page-bg-color);
-            color: #3498db;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .action-button:hover:not(:disabled) {
-            background-color: #3498db;
-            color: white;
-            transform: scale(1.05);
-        }
-
-        .action-button:disabled {
-            background-color: #bdc3c7;
-            border-color: #bdc3c7;
-            color: white;
-            cursor: not-allowed;
-        }
-
-        .loader {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 30px auto;
-        }
-        
-        /* Container da Curiosidade e Resumo */
-        .curiosity-container, .summary-container {
-            text-align: left;
-            margin-top: 20px;
-            padding: 20px;
-            border: 1px dashed var(--curiosity-border-color);
-            border-radius: 8px;
-            background-color: var(--curiosity-bg-color);
-            transition: background-color 0.3s ease;
-        }
-        .curiosity-container h3, .summary-container h3 {
+        .element-cell {
+            position: relative;
+            background-color: #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 4px;
+            font-size: 0.75rem;
             text-align: center;
-            color: var(--curiosity-title-color);
-            margin-top: 0;
-            font-family: 'Merriweather', serif;
-        }
-        
-        /* Estilos do Modal de Imagem */
-        .image-modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            padding-top: 60px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.9);
-        }
-        .modal-content {
-            margin: auto;
-            display: block;
-            width: 80%;
-            max-width: 700px;
-        }
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 35px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            transition: 0.3s;
             cursor: pointer;
+            transition: all 0.2s ease;
+            color: #1f2937; /* Default text color */
+        }
+        .element-cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .element-number {
+            font-size: 0.625rem;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+        }
+        .element-symbol {
+            font-weight: bold;
+            font-size: 1.25rem;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Media Queries para Responsividade */
-        @media (max-width: 768px) {
-            body { padding: 10px; }
-            main { padding: 20px 15px; margin-top: 10px; }
-            .book { height: 70vh; }
-            h1 { font-size: 1.8rem; }
-            .page-content { font-size: 15px; }
-            #themeToggleBtn { top: 10px; right: 10px; }
-            .topic-image { max-height: 220px; }
-        }
+        /* Colors for different categories of elements */
+        .metal-alcalino { background-color: #fca5a5; } /* Red-300 */
+        .metal-alcalino-terroso { background-color: #fcd34d; } /* Amber-300 */
+        .metal-transicao { background-color: #a5f3fc; } /* Cyan-300 */
+        .metal-pos-transicao { background-color: #93c5fd; } /* Blue-300 */
+        .semimetal { background-color: #c4b5fd; } /* Violet-300 */
+        .nao-metal { background-color: #86efac; } /* Green-300 */
+        .halogênio { background-color: #a7f3d0; } /* Teal-300 */
+        .gas-nobre { background-color: #d1d5db; } /* Gray-300 */
+        .lanthanide, .actinide { background-color: #f9a8d4; } /* Pink-300 */
 
-        @media (max-width: 480px) {
-            h1 { font-size: 1.5rem; }
-            .search-container { flex-direction: column; }
-            .book-navigation { flex-direction: column; gap: 15px; }
-            .nav-button { width: 100%; }
-            #pageSelectorContainer { order: -1; }
-            .filter-button { font-size: 11px; padding: 5px 10px; }
+        .lanthanide-actinide-placeholder {
+            background-color: #d1d5db;
+            color: #4b5563;
+        }
+        .lanthanide-container, .actinide-container {
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            gap: 4px;
+            margin-top: 1rem;
+            font-size: 0.65rem;
+            overflow-x: auto;
         }
     </style>
 </head>
-<body>
+<body class="text-gray-800 dark:text-gray-200 transition-colors duration-300">
 
-    <main>
-        <button id="themeToggleBtn">🌙</button>
-        <h1>Pequeno Gênio</h1>
-        <p>Descubra histórias fascinantes sobre qualquer tópico, como se estivesse a ler um livro.</p>
+    <div id="app" class="container mx-auto p-4 md:p-8 max-w-4xl mt-8 mb-8 bg-white/80 dark:bg-gray-900/90 backdrop-blur-sm rounded-2xl shadow-2xl">
         
-        <div class="filter-container">
-            <button class="filter-button" data-category="Países" data-topic="Brasil">Países</button>
-            <button class="filter-button" data-category="Figuras Históricas" data-topic="Cleópatra">Figuras Históricas</button>
-            <button class="filter-button" data-category="Acontecimentos Históricos" data-topic="Revolução Industrial">Acontecimentos Históricos</button>
-            <button class="filter-button" data-category="Ciência e Tecnologia" data-topic="Inteligência artificial">Ciência e Tecnologia</button>
-            <button class="filter-button" data-category="Arte e Cultura" data-topic="Renascimento">Arte e Cultura</button>
-            <button class="filter-button" data-category="Natureza" data-topic="Tubarão-branco">Natureza</button>
-        </div>
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-teal-400">
+                Pequena Ajuda
+            </h1>
+            <p class="mt-2 text-base sm:text-lg text-gray-700 dark:text-gray-300">Sua assistente de estudos, cálculos e conversões</p>
+        </header>
 
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Ex: Antigo Egito, Leonardo da Vinci...">
-            <button id="searchButton">Pesquisar</button>
-        </div>
-
-        <div id="loader" class="loader" style="display: none;"></div>
-        
-        <div id="bookContainer" class="book-container" style="display: none;">
-            <div class="book">
-                <div id="bookPagesContainer"></div>
+        <!-- Main Menu View -->
+        <main id="main-menu" class="w-full">
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <!-- Category buttons will be inserted here by JS -->
             </div>
-            <div class="book-navigation">
-                <button id="prevPageBtn" class="nav-button">Anterior</button>
-                <div id="pageSelectorContainer">
-                    <span>Página </span>
-                    <select id="pageSelector"></select>
-                    <span id="totalPagesLabel">de 1</span>
+        </main>
+        
+        <!-- Formula List View -->
+        <section id="list-view" class="hidden w-full">
+            <button id="back-to-menu" class="mb-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                &larr; Voltar ao Menu
+            </button>
+            <h2 id="list-title" class="text-2xl sm:text-3xl font-bold mb-6 border-b-2 border-blue-400 pb-2"></h2>
+            <div id="list-content" class="space-y-6">
+                <!-- Content will be inserted here by JS -->
+            </div>
+        </section>
+
+        <!-- Calculator View -->
+        <section id="calculator-view" class="hidden w-full">
+            <button id="back-to-list" class="mb-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                &larr; Voltar para a Lista
+            </button>
+            <div class="bg-white/80 dark:bg-gray-800/90 p-6 rounded-2xl shadow-lg">
+                <h2 id="calculator-title" class="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-gray-900 dark:text-white"></h2>
+                <div id="calculator-formula" class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg mb-6 text-center text-base sm:text-lg"></div>
+                
+                <div id="calculator-description" class="hidden mt-4 mb-6 text-gray-600 dark:text-gray-400 border-t dark:border-gray-700 pt-4"></div>
+
+                <div id="calculator-inputs" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <!-- Input fields will be inserted here by JS -->
                 </div>
-                <button id="nextPageBtn" class="nav-button">Próximo</button>
+                
+                <button id="calculate-btn" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg text-lg transition-transform transform hover:scale-105">
+                    Calcular
+                </button>
+                
+                <div id="calculator-results" class="mt-8 hidden">
+                     <div id="calculator-steps-container" class="hidden mb-6">
+                        <h3 class="text-xl font-semibold mb-4 border-b-2 border-gray-300 dark:border-gray-600 pb-2">Passo a Passo da IA:</h3>
+                        <div id="results-steps" class="space-y-3 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-gray-700 dark:text-gray-300 font-sans text-base leading-relaxed">
+                            <!-- AI step-by-step explanation will be inserted here -->
+                        </div>
+                    </div>
+                    <div class="p-4 bg-green-100 dark:bg-green-900/50 border-l-4 border-green-500 rounded-lg">
+                        <h4 class="font-bold text-lg text-gray-900 dark:text-white">Resultado Final:</h4>
+                        <p id="results-final" class="text-lg font-semibold text-green-800 dark:text-green-300 mt-1"></p>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
+
+        <!-- Periodic Table View -->
+        <section id="periodic-table-view" class="hidden w-full">
+            <button id="back-from-periodic" class="mb-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                &larr; Voltar para Química
+            </button>
+            <div id="periodic-table-container" class="bg-white/80 dark:bg-gray-800/90 p-6 rounded-2xl shadow-lg">
+                <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-gray-900 dark:text-white">Tabela Periódica dos Elementos</h2>
+                <div id="periodic-table-grid" class="periodic-table-grid">
+                    <!-- Elements will be dynamically generated here -->
+                </div>
+                <div id="lanthanide-container" class="lanthanide-container hidden"></div>
+                <div id="actinide-container" class="actinide-container hidden"></div>
+                <div id="element-details" class="mt-8 hidden p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                    <!-- Element details will be displayed here -->
+                </div>
+            </div>
+        </section>
         
-        <div id="actionButtons" style="display: none;">
-            <button id="summarizeButton" class="action-button">Resumir Texto</button>
-        </div>
-        
-        <div id="summaryContainer" class="summary-container" style="display: none;"></div>
-        <div id="curiosityContainer" class="curiosity-container" style="display: none;"></div>
-    </main>
-    
-    <!-- Modal para a imagem -->
-    <div id="imageModal" class="image-modal">
-      <span class="close-modal">&times;</span>
-      <img class="modal-content" id="modalImage">
     </div>
 
     <script>
-        // =========================================================================
-        // IMPORTANTE: Para o site funcionar online, precisa da sua chave de API aqui.
-        // 1. Obtenha a sua chave em: https://makersuite.google.com/app/apikey
-        // 2. Cole a chave entre as aspas.
-        // =========================================================================
-        const GEMINI_API_KEY = "COLE_AQUI_SUA_CHAVE_REAL"; // <-- SUBSTITUA ESTE TEXTO PELA SUA CHAVE
+    document.addEventListener('DOMContentLoaded', () => {
 
-        // --- ELEMENTOS DO DOM ---
-        const searchInput = document.getElementById('searchInput');
-        const searchButton = document.getElementById('searchButton');
-        const loader = document.getElementById('loader');
-        const filterButtons = document.querySelectorAll('.filter-button');
-        const themeToggleBtn = document.getElementById('themeToggleBtn');
-        const body = document.body;
-        
-        // Elementos do Livro
-        const bookContainer = document.getElementById('bookContainer');
-        const bookPagesContainer = document.getElementById('bookPagesContainer');
-        const prevPageBtn = document.getElementById('prevPageBtn');
-        const nextPageBtn = document.getElementById('nextPageBtn');
-        const pageSelector = document.getElementById('pageSelector');
-        const totalPagesLabel = document.getElementById('totalPagesLabel');
-        const curiosityContainer = document.getElementById('curiosityContainer');
-        const summaryContainer = document.getElementById('summaryContainer');
+        let exchangeRates = null;
 
-        // Elementos de Ação
-        const actionButtons = document.getElementById('actionButtons');
-        const summarizeButton = document.getElementById('summarizeButton');
-
-        // Elementos do Modal de Imagem
-        const imageModal = document.getElementById('imageModal');
-        const modalImage = document.getElementById('modalImage');
-        const closeModalBtn = document.querySelector('.close-modal');
-        
-        // --- ESTADO DA APLICAÇÃO ---
-        let currentTopicTitle = '';
-        let currentTopicText = ''; 
-        let pages = [];
-        let currentPageIndex = 0;
-        let imageUrl = '';
-        const randomTopics = ["Brasil", "Cleópatra", "Revolução Industrial", "Inteligência artificial", "Renascimento", "Tubarão-branco", "Albert Einstein", "Buraco Negro", "Império Romano", "Leonardo da Vinci"];
-
-        // --- MAPA DE IMAGENS DE FUNDO ---
-        const backgroundImages = {
-            'default_light': "url('https://images.pexels.com/photos/694740/pexels-photo-694740.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')",
-            'default_dark': "url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg')",
-            'Países': "url('https://images.pexels.com/photos/41949/earth-earth-at-night-night-lights-41949.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')",
-            'Figuras Históricas': "url('https://images.pexels.com/photos/1043566/pexels-photo-1043566.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')",
-            'Acontecimentos Históricos': "url('https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Washington_Crossing_the_Delaware_by_Emanuel_Leutze%2C_MMA-NYC%2C_1851.jpg/1920px-Washington_Crossing_the_Delaware_by_Emanuel_Leutze%2C_MMA-NYC%2C_1851.jpg')",
-            'Ciência e Tecnologia': "url('https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')",
-            'Arte e Cultura': "url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg')",
-            'Natureza': "url('https://images.pexels.com/photos/3225517/pexels-photo-3225517.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')"
-        };
-
-        // --- OUVINTES DE EVENTOS ---
-        document.addEventListener('DOMContentLoaded', () => {
-            applyInitialTheme();
-            fetchRandomCuriosityOnLoad();
-        });
-        
-        themeToggleBtn.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            const isDarkMode = body.classList.contains('dark-mode');
-            let theme = isDarkMode ? 'dark' : 'light';
-            themeToggleBtn.textContent = isDarkMode ? '☀️' : '🌙';
-            localStorage.setItem('theme', theme);
-             document.documentElement.style.setProperty('--body-bg-image', isDarkMode ? backgroundImages.default_dark : backgroundImages.default_light);
-        });
-
-        searchButton.addEventListener('click', fetchStory);
-        searchInput.addEventListener('keypress', (e) => e.key === 'Enter' && fetchStory());
-        prevPageBtn.addEventListener('click', showPrevPage);
-        nextPageBtn.addEventListener('click', showNextPage);
-        pageSelector.addEventListener('change', selectPage);
-        summarizeButton.addEventListener('click', generateAndDisplaySummary);
-
-        document.addEventListener('keydown', (e) => {
-            if (bookContainer.style.display === 'block' && e.key === 'ArrowLeft') showPrevPage();
-            if (bookContainer.style.display === 'block' && e.key === 'ArrowRight') showNextPage();
-            if (imageModal.style.display === 'block' && e.key === 'Escape') closeModal();
-        });
-
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const category = button.dataset.category;
-                const topic = button.dataset.topic; 
-                searchInput.value = topic;
-                changeBackground(category);
-                fetchStory();
-            });
-        });
-        
-        closeModalBtn.addEventListener('click', closeModal);
-        imageModal.addEventListener('click', (e) => {
-             if (e.target === imageModal) closeModal();
-        });
-        
-        function selectPage() {
-            currentPageIndex = parseInt(this.value, 10);
-            updatePageView();
-        }
-        
-        function openModal(src) {
-            modalImage.src = src;
-            imageModal.style.display = "block";
-        }
-
-        function closeModal() {
-            imageModal.style.display = "none";
-        }
-        
-        function changeBackground(category) {
-            const newBg = backgroundImages[category];
-            if (newBg) {
-                document.documentElement.style.setProperty('--body-bg-image', newBg);
-            }
-        }
-
-        // --- FUNÇÕES DE PAGINAÇÃO ---
-        function paginateText(text) {
-            const wordsPerPage = 200; 
-            const paragraphs = text.split('<br><br>');
-            let tempPages = [];
-            let currentPage = '';
-
-            paragraphs.forEach(p => {
-                if (!p) return;
-                const wordsInParagraph = p.split(/\s+/).length;
-                const wordsInCurrentPage = currentPage.split(/\s+/).length;
-
-                if (currentPage && (wordsInCurrentPage + wordsInParagraph) > wordsPerPage) {
-                    tempPages.push(currentPage.trim());
-                    currentPage = p;
-                } else {
-                    currentPage += (currentPage ? '<br><br>' : '') + p;
-                }
-            });
-            if (currentPage) tempPages.push(currentPage.trim());
-            
-            pages = tempPages.length > 0 ? tempPages : ["Não foi encontrado conteúdo para este tópico."];
-        }
-
-        function displayPages() {
-            bookPagesContainer.innerHTML = '';
-            
-            const firstPageContent = `<img class="topic-image" src="${imageUrl}" alt="Imagem de ${currentTopicTitle}" style="${imageUrl ? 'display:block;' : 'display:none;'}"><div class="page-content">${pages[0]}</div>`;
-            bookPagesContainer.innerHTML += `<div class="page" id="page-0">${firstPageContent}</div>`;
-            
-            for (let i = 1; i < pages.length; i++) {
-                bookPagesContainer.innerHTML += `<div class="page" id="page-${i}"><div class="page-content">${pages[i]}</div></div>`;
-            }
-            
-            const imgElement = bookPagesContainer.querySelector('.topic-image');
-            if (imgElement) {
-                imgElement.addEventListener('click', () => openModal(imgElement.src));
-            }
-
-            pageSelector.innerHTML = '';
-            pages.forEach((_, i) => {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i + 1;
-                pageSelector.appendChild(option);
-            });
-
-            currentPageIndex = Math.min(currentPageIndex, pages.length - 1);
-            updatePageView();
-        }
-        
-        function updatePageView() {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            
-            const currentPageElement = document.getElementById(`page-${currentPageIndex}`);
-            if (currentPageElement) currentPageElement.classList.add('active');
-            
-            pageSelector.value = currentPageIndex;
-            totalPagesLabel.textContent = `de ${pages.length}`;
-            prevPageBtn.disabled = currentPageIndex === 0;
-            nextPageBtn.disabled = currentPageIndex === pages.length - 1;
-        }
-
-        function showPrevPage() {
-            if (currentPageIndex > 0) {
-                currentPageIndex--;
-                updatePageView();
-            }
-        }
-
-        function showNextPage() {
-            if (currentPageIndex < pages.length - 1) {
-                currentPageIndex++;
-                updatePageView();
-            }
-        }
-        
-        // --- FUNÇÕES PRINCIPAIS ---
-        function applyInitialTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            const isDarkMode = savedTheme === 'dark';
-            if (isDarkMode) {
-                body.classList.add('dark-mode');
-                themeToggleBtn.textContent = '☀️';
-            } else {
-                body.classList.remove('dark-mode');
-                themeToggleBtn.textContent = '🌙';
-            }
-            document.documentElement.style.setProperty('--body-bg-image', isDarkMode ? backgroundImages.default_dark : backgroundImages.default_light);
-        }
-
-        async function fetchRandomCuriosityOnLoad() {
-             if (!hasApiKey()) {
-                curiosityContainer.style.display = 'block';
-                curiosityContainer.innerHTML = `<h3>Você Sabia?</h3><p>Para ativar as funcionalidades de curiosidades e resumos, obtenha a sua chave de API gratuita no Google AI Studio e cole no código deste ficheiro.</p>`;
-                return;
-            }
-
-            curiosityContainer.style.display = 'block';
-            curiosityContainer.innerHTML = '<h3>Você Sabia?</h3><div class="loader" style="margin: 10px auto; width: 20px; height: 20px;"></div>';
-            
+        async function fetchExchangeRates() {
+            if (exchangeRates) return;
             try {
-                const randomTopic = randomTopics[Math.floor(Math.random() * randomTopics.length)];
-                const curiosityPrompt = `Conte-me uma curiosidade surpreendente ou um fato poco conhecido sobre "${randomTopic}". A resposta deve ser curta, direta e interessante, começando diretamente com o fato.`;
-                const curiosityResult = await callGeminiAPI(curiosityPrompt);
-                
-                curiosityContainer.innerHTML = `<h3>Você Sabia? (Tema: ${randomTopic})</h3><p>${curiosityResult}</p>`;
-            } catch (error) {
-                console.error("Não foi possível gerar a curiosidade inicial:", error);
-                curiosityContainer.innerHTML = `<h3>Você Sabia?</h3><p>O mel é um dos poucos alimentos que nunca estraga. Arqueólogos já encontraram potes de mel em tumbas egípcias com mais de 3.000 anos que ainda estavam perfeitamente comestíveis.</p>`;
-            }
-        }
-        
-        async function fetchStory() {
-            const query = searchInput.value.trim();
-            if (!query) return;
-
-            loader.style.display = 'block';
-            bookContainer.style.display = 'none';
-            curiosityContainer.style.display = 'none';
-            summaryContainer.style.display = 'none';
-            actionButtons.style.display = 'none';
-            searchButton.disabled = true;
-            imageUrl = '';
-
-            try {
-                const apiUrl = `https://pt.wikipedia.org/w/api.php?action=query&format=json&prop=extracts|pageimages&explaintext=true&redirects=1&origin=*&titles=${encodeURIComponent(query)}&pithumbsize=500`;
-                const response = await fetch(apiUrl);
+                const response = await fetch('https://open.er-api.com/v6/latest/USD');
+                if (!response.ok) throw new Error('Falha na rede');
                 const data = await response.json();
-                const pageData = data.query.pages[Object.keys(data.query.pages)[0]];
-
-                if (pageData.missing) {
-                     paginateText(`Não foi possível encontrar resultados para "${query}".`);
+                if (data.result === 'success') {
+                    exchangeRates = data.rates;
+                    console.log('Taxas de câmbio carregadas com sucesso.');
                 } else {
-                    currentTopicTitle = pageData.title;
-                    currentTopicText = pageData.extract || 'Conteúdo não encontrado.';
-                    if (pageData.thumbnail) imageUrl = pageData.thumbnail.source;
+                    throw new Error('API retornou um erro');
+                }
+            } catch (error) {
+                console.error('Erro ao buscar taxas de câmbio:', error);
+                exchangeRates = { 'ERROR': 'Não foi possível carregar as taxas' };
+            }
+        }
+
+        fetchExchangeRates();
+
+        const formatNumber = (num, places = 2) => {
+            if (typeof num !== 'number' || isNaN(num)) {
+                return num;
+            }
+             if (num % 1 === 0) {
+                // For integers, format with dots as thousand separators
+                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            } else {
+                // For decimals, format to 'places' decimal places, use comma as decimal separator, and dots for thousands
+                let parts = num.toFixed(places).split('.');
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                return parts.join(',');
+            }
+        };
+        
+        const formatMoney = (num) => {
+             if (typeof num !== 'number' || isNaN(num)) {
+                return num;
+            }
+            return num.toFixed(2).replace('.', ',');
+        }
+
+        const formatExponential = (num) => {
+            if (typeof num !== 'number' || isNaN(num)) {
+                return num;
+            }
+            return num.toExponential(4).replace('.', ',');
+        }
+
+        // Periodic table data
+        const elements = [
+            { "atomic_number": 1, "symbol": "H", "name": "Hidrogênio", "atomic_mass": 1.008, "group": 1, "period": 1, "category": "Não-metal" },
+            { "atomic_number": 2, "symbol": "He", "name": "Hélio", "atomic_mass": 4.0026, "group": 18, "period": 1, "category": "Gás nobre" },
+            { "atomic_number": 3, "symbol": "Li", "name": "Lítio", "atomic_mass": 6.94, "group": 1, "period": 2, "category": "Metal alcalino" },
+            { "atomic_number": 4, "symbol": "Be", "name": "Berílio", "atomic_mass": 9.0122, "group": 2, "period": 2, "category": "Metal alcalino-terroso" },
+            { "atomic_number": 5, "symbol": "B", "name": "Boro", "atomic_mass": 10.81, "group": 13, "period": 2, "category": "Semimetal" },
+            { "atomic_number": 6, "symbol": "C", "name": "Carbono", "atomic_mass": 12.011, "group": 14, "period": 2, "category": "Não-metal" },
+            { "atomic_number": 7, "symbol": "N", "name": "Nitrogênio", "atomic_mass": 14.007, "group": 15, "period": 2, "category": "Não-metal" },
+            { "atomic_number": 8, "symbol": "O", "name": "Oxigênio", "atomic_mass": 15.999, "group": 16, "period": 2, "category": "Não-metal" },
+            { "atomic_number": 9, "symbol": "F", "name": "Flúor", "atomic_mass": 18.998, "group": 17, "period": 2, "category": "Halogênio" },
+            { "atomic_number": 10, "symbol": "Ne", "name": "Neônio", "atomic_mass": 20.180, "group": 18, "period": 2, "category": "Gás nobre" },
+            { "atomic_number": 11, "symbol": "Na", "name": "Sódio", "atomic_mass": 22.990, "group": 1, "period": 3, "category": "Metal alcalino" },
+            { "atomic_number": 12, "symbol": "Mg", "name": "Magnésio", "atomic_mass": 24.305, "group": 2, "period": 3, "category": "Metal alcalino-terroso" },
+            { "atomic_number": 13, "symbol": "Al", "name": "Alumínio", "atomic_mass": 26.982, "group": 13, "period": 3, "category": "Metal pós-transição" },
+            { "atomic_number": 14, "symbol": "Si", "name": "Silício", "atomic_mass": 28.085, "group": 14, "period": 3, "category": "Semimetal" },
+            { "atomic_number": 15, "symbol": "P", "name": "Fósforo", "atomic_mass": 30.974, "group": 15, "period": 3, "category": "Não-metal" },
+            { "atomic_number": 16, "symbol": "S", "name": "Enxofre", "atomic_mass": 32.06, "group": 16, "period": 3, "category": "Não-metal" },
+            { "atomic_number": 17, "symbol": "Cl", "name": "Cloro", "atomic_mass": 35.45, "group": 17, "period": 3, "category": "Halogênio" },
+            { "atomic_number": 18, "symbol": "Ar", "name": "Argônio", "atomic_mass": 39.948, "group": 18, "period": 3, "category": "Gás nobre" },
+            { "atomic_number": 19, "symbol": "K", "name": "Potássio", "atomic_mass": 39.0983, "group": 1, "period": 4, "category": "Metal alcalino" },
+            { "atomic_number": 20, "symbol": "Ca", "name": "Cálcio", "atomic_mass": 40.078, "group": 2, "period": 4, "category": "Metal alcalino-terroso" },
+            { "atomic_number": 21, "symbol": "Sc", "name": "Escândio", "atomic_mass": 44.956, "group": 3, "period": 4, "category": "Metal de transição" },
+            { "atomic_number": 22, "symbol": "Ti", "name": "Titânio", "atomic_mass": 47.867, "group": 4, "period": 4, "category": "Metal de transição" },
+            { "atomic_number": 23, "symbol": "V", "name": "Vanádio", "atomic_mass": 50.9415, "group": 5, "period": 4, "category": "Metal de transição" },
+            { "atomic_number": 24, "symbol": "Cr", "name": "Cromo", "atomic_mass": 51.9961, "group": 6, "period": 4, "category": "Metal de transição" },
+            { "atomic_number": 25, "symbol": "Mn", "name": "Manganês", "atomic_mass": 54.9380, "group": 7, "period": 4, "category": "Metal de transição" },
+            { "atomic_number": 26, "symbol": "Fe", "name": "Ferro", "atomic_mass": 55.845, "group": 8, "period": 4, "category": "Metal de transição" },
+            { "atomic_number": 27, "symbol": "Co", "name": "Cobalto", "atomic_mass": 58.9332, "group": 9, "period": 4, "category": "Metal de transição" },
+            { "atomic_number": 28, "symbol": "Ni", "name": "Níquel", "atomic_mass": 58.6934, "group": 10, "period": 4, "category": "Metal de transição" },
+            { "atomic_number": 29, "symbol": "Cu", "name": "Cobre", "atomic_mass": 63.546, "group": 11, "period": 4, "category": "Metal de transição" },
+            { "atomic_number": 30, "symbol": "Zn", "name": "Zinco", "atomic_mass": 65.38, "group": 12, "period": 4, "category": "Metal de transição" },
+            { "atomic_number": 31, "symbol": "Ga", "name": "Gálio", "atomic_mass": 69.723, "group": 13, "period": 4, "category": "Metal pós-transição" },
+            { "atomic_number": 32, "symbol": "Ge", "name": "Germânio", "atomic_mass": 72.630, "group": 14, "period": 4, "category": "Semimetal" },
+            { "atomic_number": 33, "symbol": "As", "name": "Arsênio", "atomic_mass": 74.9216, "group": 15, "period": 4, "category": "Semimetal" },
+            { "atomic_number": 34, "symbol": "Se", "name": "Selênio", "atomic_mass": 78.971, "group": 16, "period": 4, "category": "Não-metal" },
+            { "atomic_number": 35, "symbol": "Br", "name": "Bromo", "atomic_mass": 79.904, "group": 17, "period": 4, "category": "Halogênio" },
+            { "atomic_number": 36, "symbol": "Kr", "name": "Criptônio", "atomic_mass": 83.798, "group": 18, "period": 4, "category": "Gás nobre" },
+            { "atomic_number": 37, "symbol": "Rb", "name": "Rubídio", "atomic_mass": 85.4678, "group": 1, "period": 5, "category": "Metal alcalino" },
+            { "atomic_number": 38, "symbol": "Sr", "name": "Estrôncio", "atomic_mass": 87.62, "group": 2, "period": 5, "category": "Metal alcalino-terroso" },
+            { "atomic_number": 39, "symbol": "Y", "name": "Ítrio", "atomic_mass": 88.9059, "group": 3, "period": 5, "category": "Metal de transição" },
+            { "atomic_number": 40, "symbol": "Zr", "name": "Zircônio", "atomic_mass": 91.224, "group": 4, "period": 5, "category": "Metal de transição" },
+            { "atomic_number": 41, "symbol": "Nb", "name": "Nióbio", "atomic_mass": 92.9064, "group": 5, "period": 5, "category": "Metal de transição" },
+            { "atomic_number": 42, "symbol": "Mo", "name": "Molibdênio", "atomic_mass": 95.95, "group": 6, "period": 5, "category": "Metal de transição" },
+            { "atomic_number": 43, "symbol": "Tc", "name": "Tecnécio", "atomic_mass": 98, "group": 7, "period": 5, "category": "Metal de transição" },
+            { "atomic_number": 44, "symbol": "Ru", "name": "Rutênio", "atomic_mass": 101.07, "group": 8, "period": 5, "category": "Metal de transição" },
+            { "atomic_number": 45, "symbol": "Rh", "name": "Ródio", "atomic_mass": 102.906, "group": 9, "period": 5, "category": "Metal de transição" },
+            { "atomic_number": 46, "symbol": "Pd", "name": "Paládio", "atomic_mass": 106.42, "group": 10, "period": 5, "category": "Metal de transição" },
+            { "atomic_number": 47, "symbol": "Ag", "name": "Prata", "atomic_mass": 107.868, "group": 11, "period": 5, "category": "Metal de transição" },
+            { "atomic_number": 48, "symbol": "Cd", "name": "Cádmio", "atomic_mass": 112.414, "group": 12, "period": 5, "category": "Metal de transição" },
+            { "atomic_number": 49, "symbol": "In", "name": "Índio", "atomic_mass": 114.818, "group": 13, "period": 5, "category": "Metal pós-transição" },
+            { "atomic_number": 50, "symbol": "Sn", "name": "Estanho", "atomic_mass": 118.710, "group": 14, "period": 5, "category": "Metal pós-transição" },
+            { "atomic_number": 51, "symbol": "Sb", "name": "Antimônio", "atomic_mass": 121.760, "group": 15, "period": 5, "category": "Semimetal" },
+            { "atomic_number": 52, "symbol": "Te", "name": "Telúrio", "atomic_mass": 127.60, "group": 16, "period": 5, "category": "Semimetal" },
+            { "atomic_number": 53, "symbol": "I", "name": "Iodo", "atomic_mass": 126.904, "group": 17, "period": 5, "category": "Halogênio" },
+            { "atomic_number": 54, "symbol": "Xe", "name": "Xenônio", "atomic_mass": 131.293, "group": 18, "period": 5, "category": "Gás nobre" },
+            { "atomic_number": 55, "symbol": "Cs", "name": "Césio", "atomic_mass": 132.905, "group": 1, "period": 6, "category": "Metal alcalino" },
+            { "atomic_number": 56, "symbol": "Ba", "name": "Bário", "atomic_mass": 137.327, "group": 2, "period": 6, "category": "Metal alcalino-terroso" },
+            { "atomic_number": 57, "symbol": "La", "name": "Lantânio", "atomic_mass": 138.905, "group": 3, "period": 6, "category": "Lantanídeo" },
+            { "atomic_number": 72, "symbol": "Hf", "name": "Háfnio", "atomic_mass": 178.49, "group": 4, "period": 6, "category": "Metal de transição" },
+            { "atomic_number": 73, "symbol": "Ta", "name": "Tântalo", "atomic_mass": 180.947, "group": 5, "period": 6, "category": "Metal de transição" },
+            { "atomic_number": 74, "symbol": "W", "name": "Tungstênio", "atomic_mass": 183.84, "group": 6, "period": 6, "category": "Metal de transição" },
+            { "atomic_number": 75, "symbol": "Re", "name": "Rênio", "atomic_mass": 186.207, "group": 7, "period": 6, "category": "Metal de transição" },
+            { "atomic_number": 76, "symbol": "Os", "name": "Ósmio", "atomic_mass": 190.23, "group": 8, "period": 6, "category": "Metal de transição" },
+            { "atomic_number": 77, "symbol": "Ir", "name": "Irídio", "atomic_mass": 192.217, "group": 9, "period": 6, "category": "Metal de transição" },
+            { "atomic_number": 78, "symbol": "Pt", "name": "Platina", "atomic_mass": 195.084, "group": 10, "period": 6, "category": "Metal de transição" },
+            { "atomic_number": 79, "symbol": "Au", "name": "Ouro", "atomic_mass": 196.967, "group": 11, "period": 6, "category": "Metal de transição" },
+            { "atomic_number": 80, "symbol": "Hg", "name": "Mercúrio", "atomic_mass": 200.592, "group": 12, "period": 6, "category": "Metal de transição" },
+            { "atomic_number": 81, "symbol": "Tl", "name": "Tálio", "atomic_mass": 204.38, "group": 13, "period": 6, "category": "Metal pós-transição" },
+            { "atomic_number": 82, "symbol": "Pb", "name": "Chumbo", "atomic_mass": 207.2, "group": 14, "period": 6, "category": "Metal pós-transição" },
+            { "atomic_number": 83, "symbol": "Bi", "name": "Bismuto", "atomic_mass": 208.980, "group": 15, "period": 6, "category": "Metal pós-transição" },
+            { "atomic_number": 84, "symbol": "Po", "name": "Polônio", "atomic_mass": 209, "group": 16, "period": 6, "category": "Metal pós-transição" },
+            { "atomic_number": 85, "symbol": "At", "name": "Astato", "atomic_mass": 210, "group": 17, "period": 6, "category": "Halogênio" },
+            { "atomic_number": 86, "symbol": "Rn", "name": "Radônio", "atomic_mass": 222, "group": 18, "period": 6, "category": "Gás nobre" },
+            { "atomic_number": 87, "symbol": "Fr", "name": "Frâncio", "atomic_mass": 223, "group": 1, "period": 7, "category": "Metal alcalino" },
+            { "atomic_number": 88, "symbol": "Ra", "name": "Rádio", "atomic_mass": 226, "group": 2, "period": 7, "category": "Metal alcalino-terroso" },
+            { "atomic_number": 89, "symbol": "Ac", "name": "Actínio", "atomic_mass": 227, "group": 3, "period": 7, "category": "Actinídeo" },
+            { "atomic_number": 104, "symbol": "Rf", "name": "Rutherfórdio", "atomic_mass": 267, "group": 4, "period": 7, "category": "Metal de transição" },
+            { "atomic_number": 105, "symbol": "Db", "name": "Dúbnio", "atomic_mass": 268, "group": 5, "period": 7, "category": "Metal de transição" },
+            { "atomic_number": 106, "symbol": "Sg", "name": "Seabórgio", "atomic_mass": 269, "group": 6, "period": 7, "category": "Metal de transição" },
+            { "atomic_number": 107, "symbol": "Bh", "name": "Bóhrio", "atomic_mass": 270, "group": 7, "period": 7, "category": "Metal de transição" },
+            { "atomic_number": 108, "symbol": "Hs", "name": "Hássio", "atomic_mass": 269, "group": 8, "period": 7, "category": "Metal de transição" },
+            { "atomic_number": 109, "symbol": "Mt", "name": "Meitnério", "atomic_mass": 278, "group": 9, "period": 7, "category": "Metal de transição" },
+            { "atomic_number": 110, "symbol": "Ds", "name": "Darmstádio", "atomic_mass": 281, "group": 10, "period": 7, "category": "Metal de transição" },
+            { "atomic_number": 111, "symbol": "Rg", "name": "Roentgênio", "atomic_mass": 282, "group": 11, "period": 7, "category": "Metal de transição" },
+            { "atomic_number": 112, "symbol": "Cn", "name": "Copernício", "atomic_mass": 285, "group": 12, "period": 7, "category": "Metal de transição" },
+            { "atomic_number": 113, "symbol": "Nh", "name": "Nihônio", "atomic_mass": 286, "group": 13, "period": 7, "category": "Metal pós-transição" },
+            { "atomic_number": 114, "symbol": "Fl", "name": "Fleróvio", "atomic_mass": 289, "group": 14, "period": 7, "category": "Metal pós-transição" },
+            { "atomic_number": 115, "symbol": "Mc", "name": "Moscóvio", "atomic_mass": 289, "group": 15, "period": 7, "category": "Metal pós-transição" },
+            { "atomic_number": 116, "symbol": "Lv", "name": "Livermório", "atomic_mass": 293, "group": 16, "period": 7, "category": "Metal pós-transição" },
+            { "atomic_number": 117, "symbol": "Ts", "name": "Tenessino", "atomic_mass": 294, "group": 17, "period": 7, "category": "Halogênio" },
+            { "atomic_number": 118, "symbol": "Og", "name": "Oganessônio", "atomic_mass": 294, "group": 18, "period": 7, "category": "Gás nobre" },
+            // Lanthanides
+            { "atomic_number": 58, "symbol": "Ce", "name": "Cério", "atomic_mass": 140.116, "group": -1, "period": 6, "category": "Lantanídeo" },
+            { "atomic_number": 59, "symbol": "Pr", "name": "Praseodímio", "atomic_mass": 140.907, "group": -1, "period": 6, "category": "Lantanídeo" },
+            { "atomic_number": 60, "symbol": "Nd", "name": "Neodímio", "atomic_mass": 144.242, "group": -1, "period": 6, "category": "Lantanídeo" },
+            { "atomic_number": 61, "symbol": "Pm", "name": "Promécio", "atomic_mass": 145, "group": -1, "period": 6, "category": "Lantanídeo" },
+            { "atomic_number": 62, "symbol": "Sm", "name": "Samário", "atomic_mass": 150.36, "group": -1, "period": 6, "category": "Lantanídeo" },
+            { "atomic_number": 63, "symbol": "Eu", "name": "Európio", "atomic_mass": 151.964, "group": -1, "period": 6, "category": "Lantanídeo" },
+            { "atomic_number": 64, "symbol": "Gd", "name": "Gadolínio", "atomic_mass": 157.25, "group": -1, "period": 6, "category": "Lantanídeo" },
+            { "atomic_number": 65, "symbol": "Tb", "name": "Térbio", "atomic_mass": 158.925, "group": -1, "period": 6, "category": "Lantanídeo" },
+            { "atomic_number": 66, "symbol": "Dy", "name": "Disprósio", "atomic_mass": 162.500, "group": -1, "period": 6, "category": "Lantanídeo" },
+            { "atomic_number": 67, "symbol": "Ho", "name": "Hólmio", "atomic_mass": 164.930, "group": -1, "period": 6, "category": "Lantanídeo" },
+            { "atomic_number": 68, "symbol": "Er", "name": "Érbio", "atomic_mass": 167.259, "group": -1, "period": 6, "category": "Lantanídeo" },
+            { "atomic_number": 69, "symbol": "Tm", "name": "Túlio", "atomic_mass": 168.934, "group": -1, "period": 6, "category": "Lantanídeo" },
+            { "atomic_number": 70, "symbol": "Yb", "name": "Itérbio", "atomic_mass": 173.054, "group": -1, "period": 6, "category": "Lantanídeo" },
+            { "atomic_number": 71, "symbol": "Lu", "name": "Lutécio", "atomic_mass": 174.966, "group": -1, "period": 6, "category": "Lantanídeo" }
+        ];
+
+        // --- DATABASE OF FORMULAS & DATA ---
+        const formulas = [
+            // --- CONVERSORES ---
+            {
+                id: 'conversor-comprimento',
+                category: 'Conversores',
+                level: 'Ensino Fundamental',
+                name: 'Conversor de Comprimento',
+                formula_display: 'km \\leftrightarrow m \\leftrightarrow ft \\leftrightarrow in',
+                inputs: [
+                    { id: 'value', label: 'Valor', unit: '' },
+                    { id: 'from', label: 'De', type: 'select', options: [
+                        { value: 'km', text: 'Quilômetro (km)'},
+                        { value: 'm', text: 'Metro (m)'},
+                        { value: 'cm', text: 'Centímetro (cm)'},
+                        { value: 'mm', text: 'Milímetro (mm)'},
+                        { value: 'ft', text: 'Pé (ft)'},
+                        { value: 'in', text: 'Polegada (in)'}
+                    ]},
+                    { id: 'to', label: 'Para', type: 'select', options: [
+                        { value: 'km', text: 'Quilômetro (km)'},
+                        { value: 'm', text: 'Metro (m)'},
+                        { value: 'cm', text: 'Centímetro (cm)'},
+                        { value: 'mm', text: 'Milímetro (mm)'},
+                        { value: 'ft', text: 'Pé (ft)'},
+                        { value: 'in', text: 'Polegada (in)'}
+                    ]}
+                ],
+                calculationFunction: (inputs) => {
+                    const value = parseFloat(inputs.value.replace(',', '.'));
+                    if (isNaN(value)) return { result: 'Erro' };
+                    // Base unit: meter (m)
+                    const factors = { km: 1000, m: 1, cm: 0.01, mm: 0.001, ft: 0.3048, in: 0.0254 };
+                    const valueInMeters = value * factors[inputs.from];
+                    const result = valueInMeters / factors[inputs.to];
+                    return { result: `${formatNumber(result, 4)} ${inputs.to}` };
+                }
+            },
+            {
+                id: 'conversor-velocidade',
+                category: 'Conversores',
+                level: 'Ensino Fundamental',
+                name: 'Conversor de Velocidade',
+                formula_display: 'km/h \\leftrightarrow m/s \\leftrightarrow mph',
+                inputs: [
+                    { id: 'value', label: 'Valor', unit: '' },
+                    { id: 'from', label: 'De', type: 'select', options: [
+                        { value: 'kmh', text: 'Quilômetros por hora (km/h)'},
+                        { value: 'ms', text: 'Metros por segundo (m/s)'},
+                        { value: 'mph', text: 'Milhas por hora (mph)'}
+                    ]},
+                    { id: 'to', label: 'Para', type: 'select', options: [
+                        { value: 'kmh', text: 'Quilômetros por hora (km/h)'},
+                        { value: 'ms', text: 'Metros por segundo (m/s)'},
+                        { value: 'mph', text: 'Milhas por hora (mph)'}
+                    ]}
+                ],
+                calculationFunction: (inputs) => {
+                    const value = parseFloat(inputs.value.replace(',', '.'));
+                    const from = inputs.from;
+                    const to = inputs.to;
+                    if (isNaN(value)) return { result: 'Erro' };
+
+                    if (from === to) return { result: `${formatNumber(value)} ${from.replace('h','/h')}` };
                     
-                    paginateText(currentTopicText.replace(/\n/g, '<br><br>'));
+                    let valueInMs;
+                    if (from === 'kmh') {
+                        valueInMs = value / 3.6;
+                    } else if (from === 'ms') {
+                        valueInMs = value;
+                    } else if (from === 'mph') {
+                        valueInMs = value * 0.44704;
+                    }
+
+                    let result;
+                    if (to === 'kmh') {
+                        result = valueInMs * 3.6;
+                    } else if (to === 'ms') {
+                        result = valueInMs;
+                    } else if (to === 'mph') {
+                        result = valueInMs / 0.44704;
+                    }
+
+                    return { result: `${formatNumber(result, 2)} ${to.replace('h','/h')}` };
+                }
+            },
+            {
+                id: 'conversor-tempo',
+                category: 'Conversores',
+                level: 'Ensino Fundamental',
+                name: 'Conversor de Tempo',
+                formula_display: 'Anos \\leftrightarrow Dias \\leftrightarrow Horas...',
+                inputs: [
+                    { id: 'value', label: 'Valor', unit: '' },
+                    { id: 'from', label: 'De', type: 'select', options: [
+                        { value: 'anos', text: 'Anos' },
+                        { value: 'meses', text: 'Meses' },
+                        { value: 'dias', text: 'Dias' },
+                        { value: 'horas', text: 'Horas' },
+                        { value: 'minutos', text: 'Minutos' },
+                        { value: 'segundos', text: 'Segundos' }
+                    ]},
+                    { id: 'to', label: 'Para', type: 'select', options: [
+                        { value: 'anos', text: 'Anos' },
+                        { value: 'meses', text: 'Meses' },
+                        { value: 'dias', text: 'Dias' },
+                        { value: 'horas', text: 'Horas' },
+                        { value: 'minutos', text: 'Minutos' },
+                        { value: 'segundos', text: 'Segundos' }
+                    ]}
+                ],
+                calculationFunction: (inputs) => {
+                    const value = parseFloat(inputs.value.replace(',', '.'));
+                    if (isNaN(value)) return { result: 'Erro' };
+                    // Valores aproximados para conversão
+                    const factors = { anos: 31536000, meses: 2628000, dias: 86400, horas: 3600, minutos: 60, segundos: 1 };
+                    const valueInSeconds = value * factors[inputs.from];
+                    const result = valueInSeconds / factors[inputs.to];
+                    return { result: `${formatNumber(result, 4)} ${inputs.to}` };
+                }
+            },
+            {
+                id: 'conversor-temperatura',
+                category: 'Conversores',
+                level: 'Ensino Fundamental',
+                name: 'Conversor de Temperatura',
+                formula_display: 'C \\leftrightarrow K \\leftrightarrow F',
+                description: "Converte valores entre as três escalas de temperatura mais comuns: Celsius (C), Kelvin (K) e Fahrenheit (F). Essencial para ciência, engenharia e comunicação internacional.",
+                inputs: [
+                    { id: 'value', label: 'Valor da Temperatura', unit: '' },
+                    { id: 'from', label: 'Converter De', type: 'select', options: [
+                        { value: 'C', text: 'Celsius (°C)' },
+                        { value: 'K', text: 'Kelvin (K)' },
+                        { value: 'F', text: 'Fahrenheit (°F)' }
+                    ]},
+                    { id: 'to', label: 'Converter Para', type: 'select', options: [
+                        { value: 'C', text: 'Celsius (°C)' },
+                        { value: 'K', text: 'Kelvin (K)' },
+                        { value: 'F', text: 'Fahrenheit (°F)' }
+                    ]}
+                ],
+                calculationFunction: (inputs) => {
+                    const value = parseFloat(inputs.value.replace(',', '.'));
+                    const from = inputs.from;
+                    const to = inputs.to;
+                    if (isNaN(value)) return { result: 'Erro' };
+
+                    if (from === to) return { result: `${formatNumber(value)} °${to}` };
+
+                    let valueInCelsius;
+
+                    // Etapa 1: Converter a entrada para Celsius
+                    switch (from) {
+                        case 'C':
+                            valueInCelsius = value;
+                            break;
+                        case 'K':
+                            valueInCelsius = value - 273.15;
+                            break;
+                        case 'F':
+                            valueInCelsius = (value - 32) * 5 / 9;
+                            break;
+                    }
+
+                    let result;
+
+                    // Etapa 2: Converter de Celsius para a unidade de destino
+                    switch (to) {
+                        case 'C':
+                            result = valueInCelsius;
+                            break;
+                        case 'K':
+                            result = valueInCelsius + 273.15;
+                            break;
+                        case 'F':
+                            result = (valueInCelsius * 9 / 5) + 32;
+                            break;
+                    }
                     
-                    generateAndDisplayCuriosity();
-                    if (hasApiKey()) {
-                        actionButtons.style.display = 'flex';
-                        summarizeButton.disabled = false;
-                        summarizeButton.textContent = 'Resumir Texto';
+                    return { result: `${formatNumber(result)} °${to}` };
+                }
+            },
+            {
+                id: 'conversor-moeda',
+                category: 'Conversores',
+                level: 'Ensino Médio',
+                name: 'Conversor de Moedas',
+                formula_display: 'Câmbio em Tempo Real',
+                inputs: [
+                    { id: 'amount', label: 'Valor', unit: '' },
+                    { id: 'from', label: 'De', type: 'select', options: [] }, // Populado dinamicamente
+                    { id: 'to', label: 'Para', type: 'select', options: [] }  // Populado dinamicamente
+                ],
+                calculationFunction: (inputs) => {
+                    if (!exchangeRates || exchangeRates.ERROR) {
+                        return { result: 'Erro ao carregar taxas de câmbio.' };
+                    }
+                    const amount = parseFloat(inputs.amount.replace(',', '.'));
+                    const fromCurrency = inputs.from;
+                    const toCurrency = inputs.to;
+                    if (isNaN(amount) || !fromCurrency || !toCurrency) return { result: 'Erro nos valores' };
+
+                    const amountInUSD = amount / exchangeRates[fromCurrency];
+                    const convertedAmount = amountInUSD * exchangeRates[toCurrency];
+                    
+                    return { result: `${toCurrency} ${formatMoney(convertedAmount)}` };
+                }
+            },
+            // --- MATEMÁTICA ---
+            {
+                id: 'soma-simples',
+                category: 'Matemática',
+                level: 'Ensino Fundamental',
+                name: 'Soma de Dois Números',
+                formula_display: 'a + b',
+                description: "A operação mais fundamental da aritmética. Foi criada para unificar ou agregar quantidades, sendo a base para todos os outros cálculos complexos.",
+                inputs: [
+                    { id: 'a', label: 'Primeiro número (a)', unit: '' },
+                    { id: 'b', label: 'Segundo número (b)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a = parseFloat(inputs.a.replace(',', '.'));
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    if (isNaN(a) || isNaN(b)) return { result: 'Erro' };
+                    const result = a + b;
+                    return { result: `${formatNumber(result)}` };
+                }
+            },
+            {
+                id: 'soma-varios',
+                category: 'Matemática',
+                level: 'Ensino Fundamental',
+                name: 'Soma de Vários Números',
+                formula_display: 'a_1 + a_2 + ... + a_n',
+                description: "Soma uma lista de números, sejam eles positivos ou negativos, para obter o total. Insira os números separados por vírgula (ex: 10, -5, 20, 1.5).",
+                inputs: [
+                    { id: 'numbers', label: 'Números para somar (separados por vírgula)', unit: '', type: 'text' },
+                ],
+                calculationFunction: (inputs) => {
+                    const numbersString = inputs.numbers;
+                    if (!numbersString) return { result: 'Por favor, insira os números.' };
+                    const numbersArray = numbersString.split(',').map(num => parseFloat(num.replace(',', '.')));
+                    if (numbersArray.some(isNaN)) return { result: 'Erro: insira apenas números válidos separados por vírgula.' };
+                    const sum = numbersArray.reduce((acc, curr) => acc + curr, 0);
+                    return { result: `${formatNumber(sum)}` };
+                }
+            },
+            {
+                id: 'subtracao-varios',
+                category: 'Matemática',
+                level: 'Ensino Fundamental',
+                name: 'Subtração de Vários Números',
+                formula_display: 'a_1 - a_2 - ... - a_n',
+                description: "Subtrai uma lista de números do primeiro número. Insira os números separados por vírgula (ex: 100, 10, 5, -2).",
+                inputs: [
+                    { id: 'numbers', label: 'Números para subtrair (separados por vírgula)', unit: '', type: 'text' },
+                ],
+                calculationFunction: (inputs) => {
+                    const numbersString = inputs.numbers;
+                    if (!numbersString) return { result: 'Por favor, insira os números.' };
+                    const numbersArray = numbersString.split(',').map(num => parseFloat(num.replace(',', '.')));
+                    if (numbersArray.some(isNaN)) return { result: 'Erro: insira apenas números válidos separados por vírgula.' };
+                    if (numbersArray.length === 0) return { result: 'Erro: insira pelo menos um número.' };
+                    
+                    const result = numbersArray.slice(1).reduce((acc, curr) => acc - curr, numbersArray[0]);
+                    return { result: `${formatNumber(result)}` };
+                }
+            },
+            {
+                id: 'multiplicacao-varios',
+                category: 'Matemática',
+                level: 'Ensino Fundamental',
+                name: 'Multiplicação de Vários Números',
+                formula_display: 'a_1 \\cdot a_2 \\cdot ... \\cdot a_n',
+                description: "Multiplica uma lista de números, sejam eles positivos, negativos ou decimais. Insira os números separados por vírgula (ex: 5, 2, 3, -1).",
+                inputs: [
+                    { id: 'numbers', label: 'Números para multiplicar (separados por vírgula)', unit: '', type: 'text' },
+                ],
+                calculationFunction: (inputs) => {
+                    const numbersString = inputs.numbers;
+                    if (!numbersString) return { result: 'Por favor, insira os números.' };
+                    const numbersArray = numbersString.split(',').map(num => parseFloat(num.replace(',', '.')));
+                    if (numbersArray.some(isNaN)) return { result: 'Erro: insira apenas números válidos separados por vírgula.' };
+                    if (numbersArray.length === 0) return { result: 'Erro: insira pelo menos um número.' };
+                    
+                    const result = numbersArray.reduce((acc, curr) => acc * curr, 1);
+                    return { result: `${formatNumber(result)}` };
+                }
+            },
+            {
+                id: 'divisao-varios',
+                category: 'Matemática',
+                level: 'Ensino Fundamental',
+                name: 'Divisão de Vários Números',
+                formula_display: 'a_1 \\div a_2 \\div ... \\div a_n',
+                description: "Divide o primeiro número pelos demais em sequência. Insira os números separados por vírgula (ex: 100, 2, 5).",
+                inputs: [
+                    { id: 'numbers', label: 'Números para dividir (separados por vírgula)', unit: '', type: 'text' },
+                ],
+                calculationFunction: (inputs) => {
+                    const numbersString = inputs.numbers;
+                    if (!numbersString) return { result: 'Por favor, insira os números.' };
+                    const numbersArray = numbersString.split(',').map(num => parseFloat(num.replace(',', '.')));
+                    if (numbersArray.some(isNaN)) return { result: 'Erro: insira apenas números válidos separados por vírgula.' };
+                    if (numbersArray.length <= 1) return { result: 'Erro: insira pelo menos dois números.' };
+                    if (numbersArray.slice(1).some(n => n === 0)) return { result: 'Divisão por zero não é permitida.' };
+
+                    const result = numbersArray.slice(1).reduce((acc, curr) => acc / curr, numbersArray[0]);
+                    return { result: `${formatNumber(result)}` };
+                }
+            },
+            {
+                id: 'multiplicacao',
+                category: 'Matemática',
+                level: 'Ensino Fundamental',
+                name: 'Multiplicação',
+                formula_display: 'a \\cdot b',
+                description: "Uma forma eficiente de realizar somas repetidas de um mesmo número. É essencial para cálculos de escala, áreas e proporções.",
+                inputs: [
+                    { id: 'a', label: 'Primeiro número (a)', unit: '' },
+                    { id: 'b', label: 'Segundo número (b)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a = parseFloat(inputs.a.replace(',', '.'));
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    if (isNaN(a) || isNaN(b)) return { result: 'Erro' };
+                    const result = a * b;
+                    return { result: `${formatNumber(result)}` };
+                }
+            },
+            {
+                id: 'divisao',
+                category: 'Matemática',
+                level: 'Ensino Fundamental',
+                name: 'Divisão',
+                formula_display: 'a \\div b',
+                description: "A operação de repartir uma quantidade em partes iguais. É fundamental para noções de proporção, frações e para determinar quantas vezes um número cabe em outro.",
+                inputs: [
+                    { id: 'a', label: 'Dividendo (a)', unit: '' },
+                    { id: 'b', label: 'Divisor (b)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a = parseFloat(inputs.a.replace(',', '.'));
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    if (isNaN(a) || isNaN(b)) return { result: 'Erro' };
+                    if (b === 0) return { result: 'Divisão por zero' };
+                    const result = a / b;
+                    return { result: `${formatNumber(result)}` };
+                }
+            },
+            {
+                id: 'resolver-x',
+                category: 'Matemática',
+                level: 'Ensino Fundamental',
+                name: 'Resolver para X (Eq. 1º Grau)',
+                formula_display: 'ax + b = c',
+                description: "Encontra o valor de uma incógnita (x) em uma equação linear. É o primeiro passo na álgebra para isolar e descobrir um valor desconhecido, fundamental para a resolução de problemas.",
+                inputs: [
+                    { id: 'a', label: 'Valor que multiplica x (a)', unit: '' },
+                    { id: 'b', label: 'Valor que soma (b)', unit: '' },
+                    { id: 'c', label: 'Resultado da equação (c)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a = parseFloat(inputs.a.replace(',', '.'));
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    const c = parseFloat(inputs.c.replace(',', '.'));
+                    if (isNaN(a) || isNaN(b) || isNaN(c)) return { result: 'Erro' };
+                    if (a === 0) return { result: 'O valor de "a" não pode ser zero.' };
+                    const x = (c - b) / a;
+                    return { result: `x = ${formatNumber(x)}` };
+                }
+            },
+            {
+                id: 'regra-de-tres',
+                category: 'Matemática',
+                level: 'Ensino Fundamental',
+                name: 'Regra de Três Simples',
+                formula_display: 'a \\cdot x = b \\cdot c',
+                description: "Um método prático para resolver problemas que envolvem grandezas proporcionais. É usado para encontrar um valor desconhecido a partir de outros três, sendo vital para cálculos de porcentagem, conversões e receitas.",
+                inputs: [
+                    { id: 'a', label: 'Valor A está para', unit: '' },
+                    { id: 'b', label: 'Assim como o Valor B', unit: '' },
+                    { id: 'c', label: 'Está para o Valor C', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a = parseFloat(inputs.a.replace(',', '.'));
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    const c = parseFloat(inputs.c.replace(',', '.'));
+                    if (isNaN(a) || isNaN(b) || isNaN(c) || a === 0) return { result: 'Erro' };
+                    const x = (b * c) / a;
+                    return { result: `x = ${formatNumber(x)}` };
+                }
+            },
+            {
+                id: 'juros-simples',
+                category: 'Matemática',
+                level: 'Ensino Fundamental',
+                name: 'Juros Simples',
+                formula_display: 'J = C \\cdot i \\cdot t',
+                description: "Calcula o rendimento de um capital a uma taxa fixa, sem que os juros rendam sobre si mesmos. É a base para entender transações financeiras simples, como empréstimos de curto prazo.",
+                inputs: [
+                    { id: 'C', label: 'Capital (C)', unit: 'R$' },
+                    { id: 'i', label: 'Taxa de Juros (i)', unit: '% ao mês' },
+                    { id: 't', label: 'Tempo (t)', unit: 'meses' },
+                ],
+                calculationFunction: (inputs) => {
+                    const C = parseFloat(inputs.C.replace(',', '.'));
+                    const i_percent = parseFloat(inputs.i.replace(',', '.'));
+                    const i_decimal = i_percent / 100;
+                    const t = parseFloat(inputs.t.replace(',', '.'));
+                    if (isNaN(C) || isNaN(i_decimal) || isNaN(t)) return { result: 'Erro' };
+                    const J = C * i_decimal * t;
+                    const M = C + J;
+                    return { result: `Juros (J) = R$ ${formatMoney(J)} | Montante (M) = R$ ${formatMoney(M)}` };
+                }
+            },
+            {
+                id: 'soma-fracoes',
+                category: 'Matemática',
+                level: 'Ensino Fundamental',
+                name: 'Soma de Frações',
+                formula_display: '\\frac{a}{b} + \\frac{c}{d} = \\frac{ad+bc}{bd}',
+                description: "Define como somar partes de um todo. É fundamental para trabalhar com números que não são inteiros e resolver problemas de partilha e proporção.",
+                inputs: [
+                    { id: 'a', label: 'Numerador 1 (a)', unit: '' },
+                    { id: 'b', label: 'Denominador 1 (b)', unit: '' },
+                    { id: 'c', label: 'Numerador 2 (c)', unit: '' },
+                    { id: 'd', label: 'Denominador 2 (d)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a = parseInt(inputs.a);
+                    const b = parseInt(inputs.b);
+                    const c = parseInt(inputs.c);
+                    const d = parseInt(inputs.d);
+                    if ([a,b,c,d].some(isNaN) || b === 0 || d === 0) return { result: 'Erro' };
+                    const num = a * d + c * b;
+                    const den = b * d;
+                    return { result: `Resultado = ${num}/${den} ≈ ${formatNumber(num/den)}` };
+                }
+            },
+            {
+                id: 'funcao-modular',
+                category: 'Matemática',
+                level: 'Ensino Fundamental',
+                name: 'Função Modular (Absoluto)',
+                formula_display: '|x|',
+                description: "Calcula o valor de um número sem considerar seu sinal, ou seja, sua distância até o zero. É usada para medir magnitudes, distâncias e erros, onde apenas o valor importa.",
+                inputs: [
+                    { id: 'x', label: 'Número (x)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const x = parseFloat(inputs.x.replace(',', '.'));
+                    if (isNaN(x)) return { result: 'Erro' };
+                    return { result: `|${x}| = ${formatNumber(Math.abs(x))}` };
+                }
+            },
+            {
+                id: 'bhaskara',
+                category: 'Matemática',
+                level: 'Ensino Médio',
+                name: 'Equação do 2º Grau (Bhaskara)',
+                formula_display: 'x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}',
+                description: "Uma fórmula resolutiva para encontrar as raízes (soluções) de equações do segundo grau. É fundamental para modelar fenômenos como a trajetória de projéteis, otimização de áreas e problemas de física.",
+                inputs: [
+                    { id: 'a', label: 'Valor de a', unit: '' },
+                    { id: 'b', label: 'Valor de b', unit: '' },
+                    { id: 'c', label: 'Valor de c', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a = parseFloat(inputs.a.replace(',', '.'));
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    const c = parseFloat(inputs.c.replace(',', '.'));
+                    if (isNaN(a) || isNaN(b) || isNaN(c) || a === 0) return { result: 'Erro' };
+                    const delta = (b*b) - (4*a*c);
+                    if (delta < 0) {
+                        return { result: 'Não existem raízes reais.' };
+                    }
+                    const x1 = (-b + Math.sqrt(delta)) / (2 * a);
+                    const x2 = (-b - Math.sqrt(delta)) / (2 * a);
+                    if (delta === 0) {
+                        return { result: `A raiz única é x = ${formatNumber(x1)}` };
+                    }
+                    return { result: `x' = ${formatNumber(x1)} e x'' = ${formatNumber(x2)}` };
+                }
+            },
+            {
+                id: 'arranjo-simples',
+                category: 'Matemática',
+                level: 'Ensino Médio',
+                name: 'Arranjo Simples',
+                formula_display: 'A_{n,p} = \\frac{n!}{(n-p)!}',
+                description: "Calcula o número de maneiras de escolher e ordenar 'p' elementos de um conjunto de 'n' elementos. A ordem importa. É usado em problemas de senhas, pódios de competição e códigos.",
+                inputs: [
+                    { id: 'n', label: 'Nº total de elementos (n)', unit: '' },
+                    { id: 'p', label: 'Nº de elementos por grupo (p)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const n = parseInt(inputs.n);
+                    const p = parseInt(inputs.p);
+                    if (isNaN(n) || isNaN(p) || n < p || n < 0 || p < 0) return { result: 'Erro' };
+                    const factorial = (num) => num < 0 ? -1 : (num === 0 ? 1 : num * factorial(num - 1));
+                    const result = factorial(n) / factorial(n - p);
+                    return { result: `A_{${n},${p}} = ${formatNumber(result)}` };
+                }
+            },
+            {
+                id: 'permutacao-simples',
+                category: 'Matemática',
+                level: 'Ensino Médio',
+                name: 'Permutação Simples',
+                formula_display: 'P_n = n!',
+                description: "Calcula o número de maneiras de ordenar todos os 'n' elementos de um conjunto. É fundamental para problemas de anagramas e organização de itens em fila.",
+                inputs: [
+                    { id: 'n', label: 'Nº de elementos (n)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const n = parseInt(inputs.n);
+                    if (isNaN(n) || n < 0) return { result: 'Erro' };
+                    const factorial = (num) => {
+                        if (num < 0) return -1;
+                        if (num === 0) return 1;
+                        let res = 1;
+                        for(let i=2; i<=num; i++) res *=i;
+                        return res;
+                    };
+                    return { result: `P_${n} = ${formatNumber(factorial(n))}` };
+                }
+            },
+            {
+                id: 'combinacao-simples',
+                category: 'Matemática',
+                level: 'Ensino Médio',
+                name: 'Combinação Simples',
+                formula_display: 'C_{n,p} = \\frac{n!}{p!(n-p)!}',
+                description: "Calcula o número de maneiras de escolher 'p' elementos de um conjunto de 'n' elementos, onde a ordem não importa. É usado para formar comissões, times e em jogos de loteria.",
+                inputs: [
+                    { id: 'n', label: 'Nº total de elementos (n)', unit: '' },
+                    { id: 'p', label: 'Nº de elementos por grupo (p)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const n = parseInt(inputs.n);
+                    const p = parseInt(inputs.p);
+                    if (isNaN(n) || isNaN(p) || n < p || n < 0 || p < 0) return { result: 'Erro' };
+                    const factorial = (num) => {
+                        if (num < 0) return -1;
+                        if (num === 0) return 1;
+                        let res = 1;
+                        for(let i=2; i<=num; i++) res *=i;
+                        return res;
+                    };
+                    const result = factorial(n) / (factorial(p) * factorial(n - p));
+                    return { result: `C_{${n},${p}} = ${formatNumber(result)}` };
+                }
+            },
+            {
+                id: 'binomio-newton',
+                category: 'Matemática',
+                level: 'Ensino Médio',
+                name: 'Coeficiente Binomial',
+                formula_display: '\\binom{n}{k} = C_{n,k}',
+                description: "Calcula os coeficientes da expansão de um binômio $(a+b)^n$. É a mesma fórmula da combinação e é a base do Triângulo de Pascal, sendo crucial em probabilidade e estatística.",
+                inputs: [
+                    { id: 'n', label: 'Linha (n)', unit: '' },
+                    { id: 'k', label: 'Coluna (k)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const n = parseInt(inputs.n);
+                    const k = parseInt(inputs.k);
+                    if (isNaN(n) || isNaN(k) || n < k || n < 0 || k < 0) return { result: 'Erro' };
+                    const factorial = (num) => {
+                        if (num < 0) return -1;
+                        if (num === 0) return 1;
+                        let res = 1;
+                        for(let i=2; i<=num; i++) res *=i;
+                        return res;
+                    };
+                    const result = factorial(n) / (factorial(k) * factorial(n - k));
+                    return { result: `\\binom{${n}}{${k}} = ${formatNumber(result)}` };
+                }
+            },
+            {
+                id: 'trigonometria-basica',
+                category: 'Matemática',
+                level: 'Ensino Médio',
+                name: 'Seno, Cosseno e Tangente',
+                formula_display: 'sen(\\theta), cos(\\theta), tan(\\theta)',
+                description: "São as relações fundamentais entre os ângulos e os lados de um triângulo retângulo. Foram criadas para a astronomia, agrimensura e navegação, permitindo calcular distâncias inacessíveis.",
+                inputs: [
+                    { id: 'theta', label: 'Ângulo (θ)', unit: 'graus' },
+                ],
+                calculationFunction: (inputs) => {
+                    const angle = parseFloat(inputs.theta.replace(',', '.'));
+                    if (isNaN(angle)) return { result: 'Erro' };
+                    const rad = angle * (Math.PI / 180);
+                    const sen = Math.sin(rad);
+                    const cos = Math.cos(rad);
+                    const tan = Math.tan(rad);
+                    return { result: `sen(${angle}°) = ${formatNumber(sen)}; cos(${angle}°) = ${formatNumber(cos)}; tan(${angle}°) = ${formatNumber(tan)}` };
+                }
+            },
+            {
+                id: 'seno-soma-arcos',
+                category: 'Matemática',
+                level: 'Ensino Médio',
+                name: 'Seno da Soma de Arcos',
+                formula_display: 'sen(a+b) = sen(a)cos(b) + sen(b)cos(a)',
+                description: "Permite calcular o seno de um ângulo que é a soma de outros dois ângulos conhecidos. É crucial para simplificar expressões trigonométricas e no estudo de ondas e vibrações.",
+                inputs: [
+                    { id: 'a', label: 'Ângulo a', unit: 'graus' },
+                    { id: 'b', label: 'Ângulo b', unit: 'graus' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a = parseFloat(inputs.a.replace(',', '.'));
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    if (isNaN(a) || isNaN(b)) return { result: 'Erro' };
+                    const a_rad = a * (Math.PI / 180);
+                    const b_rad = b * (Math.PI / 180);
+                    const result = Math.sin(a_rad) * Math.cos(b_rad) + Math.sin(b_rad) * Math.cos(a_rad);
+                    return { result: `sen(${a+b}°) = ${formatNumber(result)}` };
+                }
+            },
+            {
+                id: 'tangente-soma-arcos',
+                category: 'Matemática',
+                level: 'Ensino Médio',
+                name: 'Tangente da Soma de Arcos',
+                formula_display: 'tan(a+b) = \\frac{tan(a)+tan(b)}{1-tan(a)tan(b)}',
+                description: "Calcula a tangente de um ângulo que é a soma de outros dois. É usada em física, especialmente em óptica e eletromagnetismo, para lidar com ângulos de incidência e refração.",
+                inputs: [
+                    { id: 'a', label: 'Ângulo a', unit: 'graus' },
+                    { id: 'b', label: 'Ângulo b', unit: 'graus' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a = parseFloat(inputs.a.replace(',', '.'));
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    if (isNaN(a) || isNaN(b)) return { result: 'Erro' };
+                    const a_rad = a * (Math.PI / 180);
+                    const b_rad = b * (Math.PI / 180);
+                    const tanA = Math.tan(a_rad);
+                    const tanB = Math.tan(b_rad);
+                    const result = (tanA + tanB) / (1 - tanA * tanB);
+                    return { result: `tan(${a+b}°) = ${formatNumber(result)}` };
+                }
+            },
+            {
+                id: 'funcao-afim',
+                category: 'Matemática',
+                level: 'Ensino Médio',
+                name: 'Função Afim (1º Grau)',
+                formula_display: 'y = ax + b',
+                description: "Modela relações de crescimento ou decaimento linear e constante. É usada para descrever situações como custo de produção, planos de telefonia e movimento com velocidade constante.",
+                inputs: [
+                    { id: 'a', label: 'Coeficiente Angular (a)', unit: '' },
+                    { id: 'x', label: 'Variável (x)', unit: '' },
+                    { id: 'b', label: 'Coeficiente Linear (b)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a = parseFloat(inputs.a.replace(',', '.'));
+                    const x = parseFloat(inputs.x.replace(',', '.'));
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    if ([a,x,b].some(isNaN)) return { result: 'Erro' };
+                    const y = a * x + b;
+                    return { result: `y = ${formatNumber(y)}` };
+                }
+            },
+            {
+                id: 'vertice-parabola',
+                category: 'Matemática',
+                level: 'Ensino Médio',
+                name: 'Vértice da Parábola',
+                formula_display: 'X_v = \\frac{-b}{2a}, Y_v = \\frac{-\\Delta}{4a}',
+                description: "Encontra o ponto de máximo ou mínimo de uma função do segundo grau. É crucial para problemas de otimização, como encontrar a altura máxima de um projétil ou o lucro máximo de uma empresa.",
+                inputs: [
+                    { id: 'a', label: 'Valor de a', unit: '' },
+                    { id: 'b', label: 'Valor de b', unit: '' },
+                    { id: 'c', label: 'Valor de c', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a = parseFloat(inputs.a.replace(',', '.'));
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    const c = parseFloat(inputs.c.replace(',', '.'));
+                    if (isNaN(a) || isNaN(b) || isNaN(c) || a === 0) return { result: 'Erro' };
+                    const delta = (b*b) - (4*a*c);
+                    const xv = -b / (2*a);
+                    const yv = -delta / (4*a);
+                    return { result: `V = (${formatNumber(xv)}, ${formatNumber(yv)})` };
+                }
+            },
+            {
+                id: 'soma-pa',
+                category: 'Matemática',
+                level: 'Ensino Médio',
+                name: 'Soma de uma PA Finita',
+                formula_display: 'S_n = \\frac{(a_1 + a_n)n}{2}',
+                description: "Calcula a soma dos termos de uma Progressão Aritmética. Foi criada, segundo a lenda, por Gauss para somar números de 1 a 100 rapidamente, sendo útil para somar sequências com crescimento constante.",
+                inputs: [
+                    { id: 'a1', label: 'Primeiro termo (a₁)', unit: '' },
+                    { id: 'an', label: 'Último termo (aₙ)', unit: '' },
+                    { id: 'n', label: 'Número de termos (n)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a1 = parseFloat(inputs.a1.replace(',', '.'));
+                    const an = parseFloat(inputs.an.replace(',', '.'));
+                    const n = parseInt(inputs.n);
+                    if ([a1, an, n].some(isNaN) || n <= 0) return { result: 'Erro' };
+                    const sn = ((a1 + an) * n) / 2;
+                    return { result: `Sₙ = ${formatNumber(sn)}` };
+                }
+            },
+            {
+                id: 'soma-pg',
+                category: 'Matemática',
+                level: 'Ensino Médio',
+                name: 'Soma de uma PG Finita',
+                formula_display: 'S_n = \\frac{a_1(q^n - 1)}{q-1}',
+                description: "Calcula a soma dos termos de uma Progressão Geométrica. É fundamental em matemática financeira para calcular juros compostos e o valor de investimentos ao longo do tempo.",
+                inputs: [
+                    { id: 'a1', label: 'Primeiro termo (a₁)', unit: '' },
+                    { id: 'q', label: 'Razão (q)', unit: '' },
+                    { id: 'n', label: 'Número de termos (n)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a1 = parseFloat(inputs.a1.replace(',', '.'));
+                    const q = parseFloat(inputs.q.replace(',', '.'));
+                    const n = parseInt(inputs.n);
+                    if ([a1, q, n].some(isNaN) || n <= 0 || q === 1) return { result: 'Erro' };
+                    const sn = a1 * (Math.pow(q,n) - 1) / (q - 1);
+                    return { result: `Sₙ = ${formatNumber(sn)}` };
+                }
+            },
+            {
+                id: 'funcao-exponencial',
+                category: 'Matemática',
+                level: 'Ensino Médio',
+                name: 'Função Exponencial',
+                formula_display: 'y = a^x',
+                description: "Modela fenômenos de crescimento ou decaimento muito rápidos, como crescimento populacional, juros compostos ou decaimento radioativo.",
+                inputs: [
+                    { id: 'a', label: 'Base (a)', unit: '' },
+                    { id: 'x', label: 'Expoente (x)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a = parseFloat(inputs.a.replace(',', '.'));
+                    const x = parseFloat(inputs.x.replace(',', '.'));
+                    if (isNaN(a) || isNaN(x)) return { result: 'Erro' };
+                    return { result: `y = ${formatNumber(Math.pow(a,x))}` };
+                }
+            },
+            {
+                id: 'logaritmo',
+                category: 'Matemática',
+                level: 'Ensino Superior',
+                name: 'Cálculo de Logaritmo',
+                formula_display: 'log_b(x) = y \\iff b^y = x',
+                description: "A operação inversa da exponenciação. Foi criada para simplificar cálculos manuais de multiplicação e divisão, transformando-os em somas e subtrações. Hoje é vital para medir grandezas como pH, decibéis e a escala Richter.",
+                inputs: [
+                    { id: 'x', label: 'Logaritmando (x)', unit: '' },
+                    { id: 'b', label: 'Base (b)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const x = parseFloat(inputs.x.replace(',', '.'));
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    if (isNaN(x) || isNaN(b) || x <= 0 || b <= 0 || b === 1) return { result: 'Erro' };
+                    const y = Math.log(x) / Math.log(b);
+                    return { result: `log_${b}(${x}) = ${formatNumber(y)}` };
+                }
+            },
+            {
+                id: 'derivada-potencia',
+                category: 'Matemática',
+                level: 'Ensino Superior',
+                name: 'Derivada (Regra da Potência)',
+                formula_display: '\\frac{d}{dx}(ax^n) = anx^{n-1}',
+                description: "Uma regra fundamental do Cálculo Diferencial para encontrar a taxa de variação instantânea de funções polinomiais. É a base para otimizar problemas, calcular velocidades e acelerações.",
+                inputs: [
+                    { id: 'a', label: 'Coeficiente (a)', unit: '' },
+                    { id: 'n', label: 'Expoente (n)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a = parseFloat(inputs.a.replace(',', '.'));
+                    const n = parseFloat(inputs.n.replace(',', '.'));
+                    if (isNaN(a) || isNaN(n)) return { result: 'Erro' };
+                    const new_a = a * n;
+                    const new_n = n - 1;
+                    return { result: `d/dx = ${formatNumber(new_a)}x^${formatNumber(new_n)}` };
+                }
+            },
+            {
+                id: 'soma-pg-infinita',
+                category: 'Matemática',
+                level: 'Ensino Superior',
+                name: 'Soma de uma PG Infinita',
+                formula_display: 'S = \\frac{a_1}{1-q}',
+                description: "Calcula a soma de uma série geométrica infinita, desde que a razão seja entre -1 e 1. É usada para resolver paradoxos como o de Zeno e para modelar processos que convergem para um valor limite.",
+                inputs: [
+                    { id: 'a1', label: 'Primeiro termo (a₁)', unit: '' },
+                    { id: 'q', label: 'Razão (q)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a1 = parseFloat(inputs.a1.replace(',', '.'));
+                    const q = parseFloat(inputs.q.replace(',', '.'));
+                    if (isNaN(a1) || isNaN(q) || Math.abs(q) >= 1) return { result: 'Erro: |q| deve ser < 1' };
+                    const s = a1 / (1-q);
+                    return { result: `S = ${formatNumber(s)}` };
+                }
+            },
+            
+            // --- FÍSICA ---
+            {
+                id: 'velocidade-media',
+                category: 'Física',
+                level: 'Ensino Fundamental',
+                name: 'Velocidade Média',
+                formula_display: 'V_m = \\frac{\\Delta S}{\\Delta t}',
+                description: "Esta equação calcula a taxa média de deslocamento de um objeto. Foi criada para simplificar o estudo do movimento, fornecendo uma velocidade constante que descreveria o mesmo percurso no mesmo tempo, independentemente das variações de velocidade ao longo do trajeto.",
+                inputs: [
+                    { id: 'deltaS', label: 'Distância percorrida (ΔS)', unit: 'metros' },
+                    { id: 'deltaT', label: 'Tempo gasto (Δt)', unit: 'segundos' },
+                ],
+                calculationFunction: (inputs) => {
+                    const deltaS = parseFloat(inputs.deltaS.replace(',', '.'));
+                    const deltaT = parseFloat(inputs.deltaT.replace(',', '.'));
+                    if (isNaN(deltaS) || isNaN(deltaT) || deltaT === 0) return { result: 'Erro' };
+                    const vm = deltaS / deltaT;
+                    return { result: `${formatNumber(vm, 2)} m/s` };
+                }
+            },
+            {
+                id: 'peso-objeto',
+                category: 'Física',
+                level: 'Ensino Fundamental',
+                name: 'Peso de um Objeto',
+                formula_display: 'P = m \\cdot g',
+                description: "Esta fórmula define o Peso como a força da gravidade atuando sobre a massa de um objeto. Foi criada para diferenciar 'massa' (quantidade de matéria) de 'peso' (a força de atração), um conceito fundamental na mecânica de Newton.",
+                inputs: [
+                    { id: 'm', label: 'Massa do objeto (m)', unit: 'kg' },
+                    { id: 'g', label: 'Aceleração da gravidade (g)', unit: 'm/s²' },
+                ],
+                calculationFunction: (inputs) => {
+                    const m = parseFloat(inputs.m.replace(',', '.'));
+                    const g = parseFloat(inputs.g.replace(',', '.'));
+                    if (isNaN(m) || isNaN(g)) return { result: 'Erro' };
+                    const p = m * g;
+                    return { result: `P = ${formatNumber(p, 2)} N` };
+                }
+            },
+            {
+                id: 'torricelli',
+                category: 'Física',
+                level: 'Ensino Médio',
+                name: 'Equação de Torricelli',
+                formula_display: 'v^2 = v_0^2 + 2a\\Delta S',
+                description: "Esta equação relaciona a velocidade final de um objeto com sua velocidade inicial, aceleração e distância percorrida, sem a necessidade de conhecer o tempo. Foi criada por Evangelista Torricelli como uma ferramenta poderosa para resolver problemas de cinemática onde o tempo não é uma variável conhecida.",
+                inputs: [
+                    { id: 'v0', label: 'Velocidade Inicial (v₀)', unit: 'm/s' },
+                    { id: 'a', label: 'Aceleração (a)', unit: 'm/s²' },
+                    { id: 'deltaS', label: 'Distância (ΔS)', unit: 'm' },
+                ],
+                calculationFunction: (inputs) => {
+                    const v0 = parseFloat(inputs.v0.replace(',', '.'));
+                    const a = parseFloat(inputs.a.replace(',', '.'));
+                    const deltaS = parseFloat(inputs.deltaS.replace(',', '.'));
+                    if (isNaN(v0) || isNaN(a) || isNaN(deltaS)) return { result: 'Erro' };
+                    const v2 = v0*v0 + 2*a*deltaS;
+                    if (v2 < 0) {
+                        return { result: 'Não há velocidade final real.' };
+                    }
+                    const v = Math.sqrt(v2);
+                    return { result: `v = ${formatNumber(v, 2)} m/s` };
+                }
+            },
+            {
+                id: 'newton-segunda-lei',
+                category: 'Física',
+                level: 'Ensino Médio',
+                name: 'Segunda Lei de Newton',
+                formula_display: 'F_r = m \\cdot a',
+                description: "Também conhecida como Princípio Fundamental da Dinâmica, esta é uma das leis mais importantes da física. Ela estabelece que a força resultante aplicada a um objeto é igual ao produto de sua massa pela aceleração. Foi criada por Isaac Newton para descrever matematicamente como as forças alteram o estado de movimento dos corpos.",
+                inputs: [
+                    { id: 'm', label: 'Massa (m)', unit: 'kg' },
+                    { id: 'a', label: 'Aceleração (a)', unit: 'm/s²' },
+                ],
+                calculationFunction: (inputs) => {
+                    const m = parseFloat(inputs.m.replace(',', '.'));
+                    const a = parseFloat(inputs.a.replace(',', '.'));
+                    if (isNaN(m) || isNaN(a)) return { result: 'Erro' };
+                    const F = m * a;
+                    return { result: `Fᵣ = ${formatNumber(F, 2)} N` };
+                }
+            },
+             {
+                id: 'energia-cinetica',
+                category: 'Física',
+                level: 'Ensino Superior',
+                name: 'Energia Cinética Relativística',
+                formula_display: 'E_k = (\\gamma - 1)mc^2',
+                description: "Esta equação calcula a energia associada ao movimento de um corpo em velocidades próximas à da luz, onde os efeitos da Teoria da Relatividade de Einstein se tornam significativos. Ela expande a física clássica para descrever a energia em regimes de alta velocidade.",
+                inputs: [
+                    { id: 'm', label: 'Massa de repouso (m)', unit: 'kg' },
+                    { id: 'v', label: 'Velocidade do objeto (v)', unit: 'm/s' },
+                ],
+                calculationFunction: (inputs) => {
+                    const m = parseFloat(inputs.m.replace(',', '.'));
+                    const v = parseFloat(inputs.v.replace(',', '.'));
+                    const c = 299792458; 
+                    if (isNaN(m) || isNaN(v) || v >= c || v < 0) return { result: 'Erro' };
+                    const gamma = 1 / Math.sqrt(1 - (v*v)/(c*c));
+                    const Ek = (gamma - 1) * m * (c*c);
+                    return { result: `Eₖ = ${formatExponential(Ek)} J` };
+                }
+            },
+            {
+                id: 'energia-massa',
+                category: 'Física',
+                level: 'Ensino Superior',
+                name: 'Equivalência Massa-Energia',
+                formula_display: 'E = mc^2',
+                description: "A equação mais famosa de Albert Einstein, ela revela a equivalência fundamental entre massa e energia. Foi criada para mostrar que massa pode ser convertida em energia e vice-versa, um princípio que é a base da energia nuclear.",
+                inputs: [
+                    { id: 'm', label: 'Massa (m)', unit: 'kg' },
+                ],
+                calculationFunction: (inputs) => {
+                    const m = parseFloat(inputs.m.replace(',', '.'));
+                    const c = 299792458;
+                    if (isNaN(m) || m < 0) return { result: 'Erro' };
+                    const E = m * c * c;
+                    return { result: `E = ${formatExponential(E)} J` };
+                }
+            },
+            
+            // --- QUÍMICA ---
+            {
+                id: 'densidade',
+                category: 'Química',
+                level: 'Ensino Fundamental',
+                name: 'Cálculo de Densidade',
+                formula_display: 'd = \\frac{m}{V}',
+                description: "Mede a concentração de massa em um determinado volume. É uma propriedade fundamental da matéria, usada para identificar substâncias e prever se um objeto flutuará.",
+                inputs: [
+                    { id: 'm', label: 'Massa (m)', unit: 'gramas' },
+                    { id: 'V', label: 'Volume (V)', unit: 'mL' },
+                ],
+                calculationFunction: (inputs) => {
+                    const m = parseFloat(inputs.m.replace(',', '.'));
+                    const V = parseFloat(inputs.V.replace(',', '.'));
+                    if(isNaN(m) || isNaN(V) || V === 0) return { result: 'Erro' };
+                    const d = m / V;
+                    return { result: `d = ${formatNumber(d)} g/mL` };
+                }
+            },
+            {
+                id: 'molaridade',
+                category: 'Química',
+                level: 'Ensino Médio',
+                name: 'Cálculo de Molaridade',
+                formula_display: 'M = \\frac{n}{V_{(L)}}',
+                description: "Mede a concentração de uma solução em termos de mols de soluto por litro. É a unidade de concentração mais comum em laboratórios para preparar soluções e controlar reações químicas.",
+                inputs: [
+                    { id: 'n', label: 'Nº de Mols do Soluto (n)', unit: 'mol' },
+                    { id: 'V', label: 'Volume da Solução (V)', unit: 'mL' },
+                ],
+                calculationFunction: (inputs) => {
+                    const n = parseFloat(inputs.n.replace(',', '.'));
+                    const V_ml = parseFloat(inputs.V.replace(',', '.'));
+                    if (isNaN(n) || isNaN(V_ml) || n < 0 || V_ml <= 0) return { result: 'Erro'};
+                    const V_l = V_ml / 1000;
+                    const M = n / V_l;
+                    return { result: `M = ${formatNumber(M)} M` };
+                }
+            },
+            {
+                id: 'gases-ideais',
+                category: 'Química',
+                level: 'Ensino Médio',
+                name: 'Equação dos Gases Ideais',
+                formula_display: 'PV = nRT',
+                description: "Relaciona pressão, volume, temperatura e quantidade de um gás. É um modelo fundamental para prever o comportamento de gases em diversas condições, essencial em química e engenharia.",
+                inputs: [
+                    { id: 'P', label: 'Pressão (P)', unit: 'atm' },
+                    { id: 'V', label: 'Volume (V)', unit: 'L' },
+                    { id: 'n', label: 'Nº de Mols (n)', unit: 'mol' },
+                ],
+                calculationFunction: (inputs) => {
+                    const P = parseFloat(inputs.P.replace(',', '.'));
+                    const V = parseFloat(inputs.V.replace(',', '.'));
+                    const n = parseFloat(inputs.n.replace(',', '.'));
+                    const R = 0.082; 
+                    if (isNaN(P) || isNaN(V) || isNaN(n) || P <= 0 || V <= 0 || n <= 0) return { result: 'Erro'};
+                    const T = (P * V) / (n * R);
+                    return { result: `T = ${formatNumber(T, 2)} K` };
+                }
+            },
+            {
+                id: 'lei-beer',
+                category: 'Química',
+                level: 'Ensino Superior',
+                name: 'Lei de Beer-Lambert',
+                formula_display: 'A = \\epsilon c l',
+                description: "Relaciona a absorção de luz com as propriedades de um material. É a base da espectrofotometria, uma técnica usada para determinar a concentração de substâncias em uma amostra medindo a luz que passa por ela.",
+                inputs: [
+                    { id: 'epsilon', label: 'Absortividade Molar (ε)', unit: 'L mol⁻¹ cm⁻¹' },
+                    { id: 'c', label: 'Concentração (c)', unit: 'mol/L' },
+                    { id: 'l', label: 'Caminho Óptico (l)', unit: 'cm' },
+                ],
+                calculationFunction: (inputs) => {
+                    const epsilon = parseFloat(inputs.epsilon.replace(',', '.'));
+                    const c = parseFloat(inputs.c.replace(',', '.'));
+                    const l = parseFloat(inputs.l.replace(',', '.'));
+                    if (isNaN(epsilon) || isNaN(c) || isNaN(l) || epsilon < 0 || c < 0 || l < 0) return { result: 'Erro' };
+                    const A = epsilon * c * l;
+                    return { result: `Absorvância (A) = ${formatNumber(A)}` };
+                }
+            },
+            {
+                id: 'molar-mass',
+                category: 'Química',
+                level: 'Ensino Médio',
+                name: 'Calculadora de Massa Molar',
+                formula_display: 'Calcular a \\: massa \\: molar \\: de \\: uma \\: fórmula \\: química',
+                description: "Use esta ferramenta para calcular a massa molar de qualquer composto químico. Basta inserir a fórmula (por exemplo, H2SO4) e a ferramenta fará o cálculo com base nas massas atômicas dos elementos.",
+                inputs: [
+                    { id: 'formula', label: 'Fórmula Química', type: 'text', unit: '' }
+                ],
+                calculationFunction: (inputs) => {
+                    const formula = inputs.formula.trim();
+                    if (!formula) return { result: 'Por favor, insira uma fórmula química.' };
+                    
+                    let mass = 0;
+                    let i = 0;
+                    let currentElement = '';
+                    let count = 0;
+                    
+                    try {
+                        while (i < formula.length) {
+                            if (formula[i] >= 'A' && formula[i] <= 'Z') {
+                                // New element
+                                if (currentElement !== '') {
+                                    const elementData = elements.find(el => el.symbol === currentElement);
+                                    if (!elementData) throw new Error(`Elemento '${currentElement}' não encontrado.`);
+                                    mass += elementData.atomic_mass * (count > 0 ? count : 1);
+                                }
+                                currentElement = formula[i];
+                                count = 0;
+                                i++;
+                                if (i < formula.length && formula[i] >= 'a' && formula[i] <= 'z') {
+                                    currentElement += formula[i];
+                                    i++;
+                                }
+                            } else if (formula[i] >= '0' && formula[i] <= '9') {
+                                // Number
+                                let numStr = '';
+                                while (i < formula.length && formula[i] >= '0' && formula[i] <= '9') {
+                                    numStr += formula[i];
+                                    i++;
+                                }
+                                count = parseInt(numStr, 10);
+                            } else {
+                                throw new Error(`Caractere inválido: ${formula[i]}`);
+                            }
+                        }
+
+                        // Add the last element
+                        if (currentElement !== '') {
+                            const elementData = elements.find(el => el.symbol === currentElement);
+                            if (!elementData) throw new Error(`Elemento '${currentElement}' não encontrado.`);
+                            mass += elementData.atomic_mass * (count > 0 ? count : 1);
+                        }
+                    } catch (error) {
+                        return { result: `Erro: ${error.message}` };
+                    }
+                    
+                    return { result: `Massa molar ≈ ${formatNumber(mass, 4)} g/mol` };
+                }
+            },
+            {
+                id: 'tabela-periodica',
+                category: 'Química',
+                level: 'Ensino Médio',
+                name: 'Tabela Periódica Interativa',
+                formula_display: 'Explore a \\: Tabela \\: Periódica',
+                description: "Clique em qualquer elemento da tabela para ver suas principais propriedades. Esta é uma ferramenta de referência rápida para estudantes e entusiastas de química.",
+                inputs: [],
+                calculationFunction: () => {
+                    // This is for display only
+                    return { result: 'Clique nos elementos para ver os detalhes!' };
+                }
+            },
+
+            // --- BIOLOGIA ---
+            {
+                id: 'fcmax',
+                category: 'Biologia',
+                level: 'Ensino Fundamental',
+                name: 'Frequência Cardíaca Máxima',
+                formula_display: 'FC_{max} \\approx 220 - \\text{idade}',
+                description: "Uma fórmula simples para estimar o número máximo de batimentos por minuto que o coração de uma pessoa pode atingir. É usada como referência para definir zonas de treinamento físico.",
+                inputs: [
+                    { id: 'idade', label: 'Sua Idade', unit: 'anos' },
+                ],
+                calculationFunction: (inputs) => {
+                    const idade = parseFloat(inputs.idade.replace(',', '.'));
+                    if(isNaN(idade) || idade <= 0 || idade > 120) return { result: 'Erro' };
+                    const fcmax = 220 - idade;
+                    return { result: `FCₘₐₓ ≈ ${fcmax} bpm` };
+                }
+            },
+            {
+                id: 'imc',
+                category: 'Biologia',
+                level: 'Ensino Médio',
+                name: 'Índice de Massa Corporal (IMC)',
+                formula_display: 'IMC = \\frac{\\text{Peso}}{\\text{Altura}^2}',
+                description: "Uma medida internacional para avaliar se o peso de uma pessoa está dentro de uma faixa saudável para sua altura. Foi criada como uma ferramenta rápida para triagem em estudos de saúde populacional.",
+                inputs: [
+                    { id: 'peso', label: 'Peso', unit: 'kg' },
+                    { id: 'altura', label: 'Altura', unit: 'cm' },
+                ],
+                calculationFunction: (inputs) => {
+                    const peso = parseFloat(inputs.peso.replace(',', '.'));
+                    const altura_cm = parseFloat(inputs.altura.replace(',', '.'));
+                    if(isNaN(peso) || isNaN(altura_cm) || peso <= 0 || altura_cm <= 0) return { result: 'Erro' };
+
+                    const altura_m = altura_cm / 100;
+                    const imc = peso / (altura_m * altura_m);
+                    
+                    if (imc < 18.5) {
+                        return { result: 'Abaixo do peso' };
+                    } else if (imc >= 18.5 && imc <= 24.9) {
+                        return { result: 'Peso normal' };
+                    } else {
+                        return { result: 'Acima do peso' };
                     }
                 }
-            } catch (error) {
-                console.error('Erro ao buscar na API da Wikipedia:', error);
-                paginateText('Ocorreu um erro de rede. Por favor, tente novamente.');
-            } finally {
-                loader.style.display = 'none';
-                bookContainer.style.display = 'block';
-                displayPages();
-                searchButton.disabled = false;
-            }
+            },
+            {
+                id: 'hardy-weinberg',
+                category: 'Biologia',
+                level: 'Ensino Médio',
+                name: 'Equilíbrio de Hardy-Weinberg',
+                formula_display: 'p^2 + 2pq + q^2 = 1',
+                description: "Um princípio da genética de populações que descreve a frequência de alelos e genótipos em uma população que não está evoluindo. Serve como um modelo nulo para testar se a evolução está ocorrendo.",
+                inputs: [
+                    { id: 'p', label: 'Frequência do alelo dominante (p)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const p = parseFloat(inputs.p.replace(',', '.'));
+                    if(isNaN(p) || p < 0 || p > 1) return { result: 'Erro' };
+                    const q = 1 - p;
+                    const p2 = p * p;
+                    const pq2 = 2 * p * q;
+                    const q2 = q * q;
+                    return { result: `Frequências: AA=${formatNumber(p2)}, Aa=${formatNumber(pq2)}, aa=${formatNumber(q2)}` };
+                }
+            },
+            {
+                id: 'crescimento-logistico',
+                category: 'Biologia',
+                level: 'Ensino Superior',
+                name: 'Crescimento Populacional Logístico',
+                formula_display: '\\frac{dN}{dt} = rN(1 - \\frac{N}{K})',
+                description: "Um modelo matemático que descreve o crescimento de uma população considerando a limitação de recursos do ambiente (capacidade de suporte K). É mais realista que o crescimento exponencial para a maioria das populações.",
+                inputs: [
+                    { id: 'r', label: 'Taxa de crescimento (r)', unit: '' },
+                    { id: 'N', label: 'Tamanho atual da população (N)', unit: '' },
+                    { id: 'K', label: 'Capacidade de suporte (K)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const r = parseFloat(inputs.r.replace(',', '.'));
+                    const N = parseFloat(inputs.N.replace(',', '.'));
+                    const K = parseFloat(inputs.K.replace(',', '.'));
+                    if (isNaN(r) || isNaN(N) || isNaN(K) || N < 0 || K <= 0) return { result: 'Erro' };
+                    const dNdt = r * N * (1 - (N/K));
+                    return { result: `Taxa de crescimento ≈ ${formatNumber(dNdt)}` };
+                }
+            },
+
+            // --- GEOMETRIA ---
+            {
+                id: 'area-quadrado',
+                category: 'Geometria',
+                level: 'Ensino Fundamental',
+                name: 'Área do Quadrado',
+                formula_display: 'A = l^2',
+                description: "Calcula a medida da superfície de um quadrado. Foi criada como uma das fórmulas básicas da geometria para medição de terrenos e espaços com lados iguais.",
+                inputs: [ { id: 'l', label: 'Lado (l)', unit: 'cm' } ],
+                calculationFunction: (inputs) => {
+                    const l = parseFloat(inputs.l.replace(',', '.'));
+                    if (isNaN(l) || l <= 0) return { result: 'Erro' };
+                    return { result: `A = ${formatNumber(l*l)} cm²` };
+                }
+            },
+            {
+                id: 'area-retangulo',
+                category: 'Geometria',
+                level: 'Ensino Fundamental',
+                name: 'Área do Retângulo',
+                formula_display: 'A = b \\cdot h',
+                description: "Calcula a medida da superfície de um retângulo. É uma fórmula fundamental para medir qualquer espaço retangular, desde um campo até a planta de uma casa.",
+                inputs: [
+                    { id: 'b', label: 'Base (b)', unit: 'cm' },
+                    { id: 'h', label: 'Altura (h)', unit: 'cm' },
+                ],
+                calculationFunction: (inputs) => {
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    const h = parseFloat(inputs.h.replace(',', '.'));
+                    if (isNaN(b) || isNaN(h) || b <= 0 || h <= 0) return { result: 'Erro' };
+                    return { result: `A = ${formatNumber(b*h)} cm²` };
+                }
+            },
+            {
+                id: 'area-triangulo',
+                category: 'Geometria',
+                level: 'Ensino Fundamental',
+                name: 'Área do Triângulo',
+                formula_display: 'A = \\frac{b \\cdot h}{2}',
+                description: "Calcula a medida da superfície de um triângulo. Foi desenvolvida para medir áreas de formas triangulares, que são a base para calcular a área de polígonos mais complexos.",
+                inputs: [
+                    { id: 'b', label: 'Base (b)', unit: 'cm' },
+                    { id: 'h', label: 'Altura (h)', unit: 'cm' },
+                ],
+                calculationFunction: (inputs) => {
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    const h = parseFloat(inputs.h.replace(',', '.'));
+                    if (isNaN(b) || isNaN(h) || b <= 0 || h <= 0) return { result: 'Erro' };
+                    return { result: `A = ${formatNumber((b * h)/2)} cm²` };
+                }
+            },
+            {
+                id: 'area-circulo',
+                category: 'Geometria',
+                level: 'Ensino Fundamental',
+                name: 'Área do Círculo',
+                formula_display: 'A = \\pi \\cdot r^2',
+                description: "Calcula a medida da superfície de um círculo a partir do seu raio. É uma fórmula essencial em engenharia, design e ciência para qualquer objeto ou espaço de formato circular.",
+                inputs: [ { id: 'r', label: 'Raio (r)', unit: 'cm' } ],
+                calculationFunction: (inputs) => {
+                    const r = parseFloat(inputs.r.replace(',', '.'));
+                    if (isNaN(r) || r <= 0) return { result: 'Erro' };
+                    return { result: `A = ${formatNumber(Math.PI * r * r)} cm²` };
+                }
+            },
+            {
+                id: 'area-paralelogramo',
+                category: 'Geometria',
+                level: 'Ensino Fundamental',
+                name: 'Área do Paralelogramo',
+                formula_display: 'A = b \\cdot h',
+                description: "Calcula a medida da superfície de um paralelogramo. É uma generalização da área do retângulo, útil para medir terrenos ou objetos com lados paralelos, mas não necessariamente com ângulos de 90 graus.",
+                inputs: [
+                    { id: 'b', label: 'Base (b)', unit: 'cm' },
+                    { id: 'h', label: 'Altura (h)', unit: 'cm' },
+                ],
+                calculationFunction: (inputs) => {
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    const h = parseFloat(inputs.h.replace(',', '.'));
+                    if (isNaN(b) || isNaN(h) || b <= 0 || h <= 0) return { result: 'Erro' };
+                    return { result: `A = ${formatNumber(b * h)} cm²` };
+                }
+            },
+            {
+                id: 'area-losango',
+                category: 'Geometria',
+                level: 'Ensino Fundamental',
+                name: 'Área do Losango',
+                formula_display: 'A = \\frac{D \\cdot d}{2}',
+                description: "Calcula a medida da superfície de um losango a partir de suas diagonais. É particularmente útil em design e cristalografia, onde a forma de losango é comum.",
+                inputs: [
+                    { id: 'D', label: 'Diagonal Maior (D)', unit: 'cm' },
+                    { id: 'd', label: 'Diagonal Menor (d)', unit: 'cm' },
+                ],
+                calculationFunction: (inputs) => {
+                    const D = parseFloat(inputs.D.replace(',', '.'));
+                    const d = parseFloat(inputs.d.replace(',', '.'));
+                    if (isNaN(D) || isNaN(d) || D <= 0 || d <= 0) return { result: 'Erro' };
+                    return { result: `A = ${formatNumber((D*d)/2)} cm²` };
+                }
+            },
+            {
+                id: 'area-trapezio',
+                category: 'Geometria',
+                level: 'Ensino Fundamental',
+                name: 'Área do Trapézio',
+                formula_display: 'A = \\frac{(B+b)h}{2}',
+                description: "Calcula a medida da superfície de um trapézio. Foi criada para medir áreas de terrenos ou figuras com apenas dois lados paralelos, uma forma geométrica comum em arquitetura e engenharia civil.",
+                inputs: [
+                    { id: 'B', label: 'Base Maior (B)', unit: 'cm' },
+                    { id: 'b', label: 'Base Menor (b)', unit: 'cm' },
+                    { id: 'h', label: 'Altura (h)', unit: 'cm' },
+                ],
+                calculationFunction: (inputs) => {
+                    const B = parseFloat(inputs.B.replace(',', '.'));
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    const h = parseFloat(inputs.h.replace(',', '.'));
+                    if ([B,b,h].some(isNaN) || B <= 0 || b <= 0 || h <= 0) return { result: 'Erro' };
+                    return { result: `A = ${formatNumber(((B+b)*h)/2)} cm²` };
+                }
+            },
+            {
+                id: 'perimetro-quadrado',
+                category: 'Geometria',
+                level: 'Ensino Fundamental',
+                name: 'Perímetro do Quadrado',
+                formula_display: 'P = 4 \\cdot l',
+                description: "Calcula o comprimento total do contorno de um quadrado. É uma fórmula básica para medir cercas, molduras e qualquer projeto que necessite do comprimento total dos lados de uma forma quadrada.",
+                inputs: [ { id: 'l', label: 'Lado (l)', unit: 'cm' } ],
+                calculationFunction: (inputs) => {
+                    const l = parseFloat(inputs.l.replace(',', '.'));
+                    if (isNaN(l) || l <= 0) return { result: 'Erro' };
+                    return { result: `P = ${formatNumber(4 * l, 2)} cm` };
+                }
+            },
+            {
+                id: 'comprimento-circunferencia',
+                category: 'Geometria',
+                level: 'Ensino Fundamental',
+                name: 'Comprimento da Circunferência',
+                formula_display: 'C = 2 \\pi r',
+                description: "Calcula o comprimento total do contorno de um círculo (sua 'borda'). É crucial para o design de rodas, engrenagens e qualquer projeto que envolva a medição da borda de um objeto circular.",
+                inputs: [ { id: 'r', label: 'Raio (r)', unit: 'cm' } ],
+                calculationFunction: (inputs) => {
+                    const r = parseFloat(inputs.r.replace(',', '.'));
+                    if (isNaN(r) || r <= 0) return { result: 'Erro' };
+                    return { result: `C = ${formatNumber(2 * Math.PI * r)} cm` };
+                }
+            },
+            {
+                id: 'pitagoras',
+                category: 'Geometria',
+                level: 'Ensino Médio',
+                name: 'Teorema de Pitágoras',
+                description: "Esta é uma das relações mais fundamentais da geometria, descrevendo a relação entre os lados de um triângulo retângulo. Foi desenvolvida para resolver problemas práticos de medição de distâncias, arquitetura e navegação.",
+                formula_display: 'a^2 = b^2 + c^2',
+                inputs: [
+                    { id: 'b', label: 'Cateto b', unit: 'cm' },
+                    { id: 'c', label: 'Cateto c', unit: 'cm' },
+                ],
+                calculationFunction: (inputs) => {
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    const c = parseFloat(inputs.c.replace(',', '.'));
+                    if (isNaN(b) || isNaN(c) || b <= 0 || c <= 0) return { result: 'Erro' };
+                    const a = Math.sqrt((b*b) + (c*c));
+                    return { result: `Hipotenusa (a) = ${formatNumber(a)} cm` };
+                }
+            },
+            {
+                id: 'teorema-tales',
+                category: 'Geometria',
+                level: 'Ensino Médio',
+                name: 'Teorema de Tales',
+                formula_display: '\\frac{a}{b} = \\frac{c}{x}',
+                description: "Este teorema estabelece a proporcionalidade entre segmentos de retas cortadas por retas paralelas. Foi criado por Tales de Mileto para medir alturas e distâncias inacessíveis, como a altura de uma pirâmide, usando sombras e proporções.",
+                inputs: [
+                    { id: 'a', label: 'Segmento a', unit: '' },
+                    { id: 'b', label: 'Segmento b', unit: '' },
+                    { id: 'c', label: 'Segmento c', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const a = parseFloat(inputs.a.replace(',', '.'));
+                    const b = parseFloat(inputs.b.replace(',', '.'));
+                    const c = parseFloat(inputs.c.replace(',', '.'));
+                    if ([a,b,c].some(isNaN) || a === 0) return { result: 'Erro' };
+                    const x = (b*c)/a;
+                    return { result: `x = ${formatNumber(x)}` };
+                }
+            },
+            {
+                id: 'volume-esfera',
+                category: 'Geometria',
+                level: 'Ensino Médio',
+                name: 'Volume da Esfera',
+                formula_display: 'V = \\frac{4}{3}\\pi r^3',
+                description: "Calcula a medida do espaço tridimensional ocupado por uma esfera. É essencial em campos como a astrofísica (para calcular o volume de planetas) e engenharia (para projetar rolamentos de esferas).",
+                inputs: [ { id: 'r', label: 'Raio (r)', unit: 'cm' } ],
+                calculationFunction: (inputs) => {
+                    const r = parseFloat(inputs.r.replace(',', '.'));
+                    if (isNaN(r) || r <= 0) return { result: 'Erro' };
+                    const volume = (4/3) * Math.PI * Math.pow(r, 3);
+                    return { result: `V = ${formatNumber(volume)} cm³` };
+                }
+            },
+            {
+                id: 'volume-cilindro',
+                category: 'Geometria',
+                level: 'Ensino Médio',
+                name: 'Volume do Cilindro',
+                formula_display: 'V = \\pi r^2 h',
+                description: "Calcula a medida do espaço tridimensional ocupado por um cilindro. É uma fórmula amplamente utilizada na indústria para calcular a capacidade de tanques, latas e tubulações.",
+                inputs: [
+                    { id: 'r', label: 'Raio da base (r)', unit: 'cm' },
+                    { id: 'h', label: 'Altura (h)', unit: 'cm' },
+                ],
+                calculationFunction: (inputs) => {
+                    const r = parseFloat(inputs.r.replace(',', '.'));
+                    const h = parseFloat(inputs.h.replace(',', '.'));
+                    if (isNaN(r) || isNaN(h) || r <= 0 || h <= 0) return { result: 'Erro' };
+                    const volume = Math.PI * r * r * h;
+                    return { result: `V = ${formatNumber(volume)} cm³` };
+                }
+            },
+            {
+                id: 'area-triangulo-equilatero',
+                category: 'Geometria',
+                level: 'Ensino Médio',
+                name: 'Área do Triângulo Equilátero',
+                formula_display: 'A = \\frac{l^2\\sqrt{3}}{4}',
+                description: "Calcula a área de um triângulo com todos os três lados iguais. É uma fórmula específica que simplifica o cálculo quando se sabe que o triângulo é equilátero, comum em design e estruturas arquitetônicas.",
+                inputs: [ { id: 'l', label: 'Lado (l)', unit: 'cm' } ],
+                calculationFunction: (inputs) => {
+                    const l = parseFloat(inputs.l.replace(',', '.'));
+                    if (isNaN(l) || l <= 0) return { result: 'Erro' };
+                    const area = (l*l * Math.sqrt(3)) / 4;
+                    return { result: `A = ${formatNumber(area)} cm²` };
+                }
+            },
+            {
+                id: 'soma-angulos-poligono',
+                category: 'Geometria',
+                level: 'Ensino Médio',
+                name: 'Soma dos Ângulos Internos de um Polígono',
+                formula_display: 'S = (n-2) \\cdot 180°',
+                description: "Fornece a soma de todos os ângulos internos de um polígono regular ou irregular com 'n' lados. Foi criada para entender as propriedades geométricas dos polígonos e auxiliar no design e na construção de estruturas.",
+                inputs: [ { id: 'n', label: 'Nº de lados (n)', unit: '' } ],
+                calculationFunction: (inputs) => {
+                    const n = parseInt(inputs.n);
+                    if (isNaN(n) || n < 3) return { result: 'Erro (n≥3)' };
+                    return { result: `S = ${formatNumber((n-2)*180)}°` };
+                }
+            },
+            {
+                id: 'area-hexagono-regular',
+                category: 'Geometria',
+                level: 'Ensino Médio',
+                name: 'Área do Hexágono Regular',
+                formula_display: 'A = \\frac{3l^2\\sqrt{3}}{2}',
+                description: "Calcula a área de um polígono de seis lados iguais. O hexágono é uma forma muito eficiente encontrada na natureza (favo de mel) e em engenharia (parafusos), e esta fórmula simplifica a medição de sua superfície.",
+                inputs: [ { id: 'l', label: 'Lado (l)', unit: 'cm' } ],
+                calculationFunction: (inputs) => {
+                    const l = parseFloat(inputs.l.replace(',', '.'));
+                    if (isNaN(l) || l <= 0) return { result: 'Erro' };
+                    const area = (3 * l*l * Math.sqrt(3)) / 2;
+                    return { result: `A = ${formatNumber(area)} cm²` };
+                }
+            },
+            {
+                id: 'triangulo-inscrito',
+                category: 'Geometria',
+                level: 'Ensino Médio',
+                name: 'Triângulo Equilátero Inscrito',
+                formula_display: 'l = R\\sqrt{3}',
+                description: "Relaciona o lado de um triângulo equilátero com o raio da circunferência que o circunscreve. É uma fórmula usada em geometria construtiva e design para encaixar formas perfeitamente.",
+                inputs: [ { id: 'R', label: 'Raio da Circunferência (R)', unit: 'cm' } ],
+                calculationFunction: (inputs) => {
+                    const R = parseFloat(inputs.R.replace(',', '.'));
+                    if (isNaN(R) || R <= 0) return { result: 'Erro' };
+                    const l = R * Math.sqrt(3);
+                    return { result: `Lado (l) = ${formatNumber(l)} cm` };
+                }
+            },
+            {
+                id: 'quadrado-inscrito',
+                category: 'Geometria',
+                level: 'Ensino Médio',
+                name: 'Quadrado Inscrito',
+                formula_display: 'l = R\\sqrt{2}',
+                description: "Relaciona o lado de um quadrado com o raio da circunferência que o circunscreve. É usada em problemas de otimização de espaço e design, para saber o maior quadrado que cabe dentro de um círculo.",
+                inputs: [ { id: 'R', label: 'Raio da Circunferência (R)', unit: 'cm' } ],
+                calculationFunction: (inputs) => {
+                    const R = parseFloat(inputs.R.replace(',', '.'));
+                    if (isNaN(R) || R <= 0) return { result: 'Erro' };
+                    const l = R * Math.sqrt(2);
+                    return { result: `Lado (l) = ${formatNumber(l)} cm` };
+                }
+            },
+            {
+                id: 'hexagono-inscrito',
+                category: 'Geometria',
+                level: 'Ensino Médio',
+                name: 'Hexágono Regular Inscrito',
+                formula_display: 'l = R',
+                description: "Relaciona o lado de um hexágono regular com o raio da circunferência que o circunscreve (são iguais!). É uma propriedade geométrica elegante e útil em design mecânico e padrões de mosaico.",
+                inputs: [ { id: 'R', label: 'Raio da Circunferência (R)', unit: 'cm' } ],
+                calculationFunction: (inputs) => {
+                    const R = parseFloat(inputs.R.replace(',', '.'));
+                    if (isNaN(R) || R <= 0) return { result: 'Erro' };
+                    const l = R;
+                    return { result: `Lado (l) = ${formatNumber(l)} cm` };
+                }
+            },
+            {
+                id: 'distancia-pontos',
+                category: 'Geometria',
+                level: 'Ensino Superior',
+                name: 'Distância Entre Dois Pontos',
+                formula_display: 'd = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}',
+                description: "Baseada no Teorema de Pitágoras, esta fórmula calcula a distância em linha reta entre dois pontos em um plano cartesiano. É fundamental para a geometria analítica, navegação por GPS e computação gráfica.",
+                inputs: [
+                    { id: 'x1', label: 'Ponto A (x₁)', unit: '' },
+                    { id: 'y1', label: 'Ponto A (y₁)', unit: '' },
+                    { id: 'x2', label: 'Ponto B (x₂)', unit: '' },
+                    { id: 'y2', label: 'Ponto B (y₂)', unit: '' },
+                ],
+                calculationFunction: (inputs) => {
+                    const x1 = parseFloat(inputs.x1.replace(',', '.'));
+                    const y1 = parseFloat(inputs.y1.replace(',', '.'));
+                    const x2 = parseFloat(inputs.x2.replace(',', '.'));
+                    const y2 = parseFloat(inputs.y2.replace(',', '.'));
+                    if ([x1, y1, x2, y2].some(isNaN)) return { result: 'Erro' };
+                    const d = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                    return { result: `d = ${formatNumber(d)}` };
+                }
+            },
+        ];
+
+        // --- APPLICATION LOGIC ---
+        const mainMenu = document.getElementById('main-menu');
+        const listView = document.getElementById('list-view');
+        const calculatorView = document.getElementById('calculator-view');
+        const periodicTableView = document.getElementById('periodic-table-view');
+
+        let currentCategory = '';
+
+        const categories = [...new Set(formulas.map(f => f.category))].sort();
+
+        const categoryColors = {
+            'Matemática': 'from-blue-500 to-indigo-500',
+            'Física': 'from-yellow-500 to-orange-500',
+            'Química': 'from-green-500 to-teal-500',
+            'Biologia': 'from-lime-500 to-emerald-500',
+            'Geometria': 'from-purple-500 to-pink-500',
+            'Conversores': 'from-rose-500 to-red-500',
+        };
+
+        const categoryIcons = {
+            'Matemática': 'ph-calculator',
+            'Física': 'ph-atom',
+            'Química': 'ph-test-tube',
+            'Biologia': 'ph-leaf',
+            'Geometria': 'ph-compass',
+            'Conversores': 'ph-arrows-clockwise',
+        };
+
+        function showView(viewId) {
+            mainMenu.classList.add('hidden');
+            listView.classList.add('hidden');
+            calculatorView.classList.add('hidden');
+            periodicTableView.classList.add('hidden');
+            document.getElementById(viewId).classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function renderMainMenu() {
+            const menuGrid = mainMenu.querySelector('.grid');
+            menuGrid.innerHTML = '';
+            categories.forEach(category => {
+                const color = categoryColors[category] || 'from-gray-500 to-gray-600';
+                const icon = categoryIcons[category] || 'ph-question';
+                const button = document.createElement('button');
+                button.className = `p-4 sm:p-6 rounded-2xl text-gray-900 dark:text-white text-lg sm:text-xl font-bold shadow-lg transition-transform transform hover:scale-105 bg-gradient-to-br ${color}`;
+                button.dataset.category = category;
+                button.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full">
+                        <i class="ph-fill ${icon} text-4xl sm:text-5xl mb-2"></i>
+                        <span>${category}</span>
+                    </div>
+                `;
+                button.addEventListener('click', () => {
+                    currentCategory = category;
+                    renderFormulaListView(category);
+                    showView('list-view');
+                });
+                menuGrid.appendChild(button);
+            });
         }
         
-        async function generateAndDisplaySummary() {
-            summarizeButton.disabled = true;
-            summarizeButton.textContent = 'A resumir...';
-            summaryContainer.style.display = 'block';
-            summaryContainer.innerHTML = '<h3>Resumo</h3><div class="loader" style="margin: 10px auto; width: 20px; height: 20px;"></div>';
-
-            try {
-                const prompt = `Faça um resumo conciso e informativo sobre "${currentTopicTitle}", baseado no texto a seguir. O resumo deve capturar os pontos principais e ser fácil de entender.\n\nTEXTO ORIGINAL:\n${currentTopicText}`;
-                
-                const summaryResult = await callGeminiAPI(prompt);
-                summaryContainer.innerHTML = `<h3>Resumo</h3><p>${summaryResult.replace(/\n/g, '<br><br>')}</p>`;
-                
-                actionButtons.style.display = 'none'; 
-
-            } catch (error) {
-                console.error("Não foi possível gerar o resumo:", error);
-                let userMessage = `Não foi possível gerar o resumo. <br><strong>Detalhe técnico:</strong> ${error.message}`;
-                summaryContainer.innerHTML = `<h3>Erro ao Resumir</h3><p style="color: #c0392b; text-align: center;">${userMessage}</p>`;
-                summarizeButton.disabled = false;
-                summarizeButton.textContent = 'Resumir Texto';
-            }
-        }
-
-        async function generateAndDisplayCuriosity() {
-            if (!hasApiKey()) return; 
-
-            curiosityContainer.style.display = 'block';
-            curiosityContainer.innerHTML = '<div class="loader" style="margin: 10px auto; width: 20px; height: 20px;"></div>';
-
-            try {
-                const curiosityPrompt = `Por favor, gere uma curiosidade diferente e surpreendente sobre "${currentTopicTitle}". Tente evitar fatos muito comuns.`;
-                const curiosityResult = await callGeminiAPI(curiosityPrompt);
-                
-                curiosityContainer.innerHTML = `<h3>Você Sabia?</h3><p>${curiosityResult}</p>`;
-
-            } catch (error) {
-                console.error("Não foi possível gerar a curiosidade:", error);
-                curiosityContainer.style.display = 'none';
-            }
-        }
-
-        function hasApiKey() {
-            return typeof GEMINI_API_KEY !== 'undefined' && GEMINI_API_KEY !== "COLE_AQUI_SUA_CHAVE_REAL";
-        }
-
-        async function callGeminiAPI(promptText) {
-            if (!hasApiKey()) {
-                 throw new Error("Chave de API não configurada.");
-            }
-
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
-            const payload = { contents: [{ parts: [{ text: promptText }] }] };
-
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+        function renderFormulaListView(category) {
+            document.getElementById('list-title').textContent = `Fórmulas de ${category}`;
+            const contentDiv = document.getElementById('list-content');
+            contentDiv.innerHTML = '';
+            
+            const levels = ['Ensino Fundamental', 'Ensino Médio', 'Ensino Superior', 'Inteligência Artificial'];
+            levels.forEach(level => {
+                const formulasInLevel = formulas.filter(f => f.category === category && f.level === level);
+                if (formulasInLevel.length > 0) {
+                    const levelSection = document.createElement('div');
+                     if(category !== 'IA Resolve') {
+                        levelSection.innerHTML = `<h3 class="text-xl sm:text-2xl font-semibold mb-4 text-blue-600 dark:text-blue-400">${level}</h3>`;
+                    }
+                    const list = document.createElement('div');
+                    list.className = 'grid grid-cols-1 md:grid-cols-2 gap-4';
+                    
+                    formulasInLevel.sort((a, b) => a.name.localeCompare(b.name)).forEach(formula => {
+                        const card = document.createElement('div');
+                        card.className = 'bg-white/80 dark:bg-gray-800/90 p-4 rounded-lg shadow-md hover:shadow-xl hover:ring-2 hover:ring-blue-400 transition-all cursor-pointer';
+                        card.innerHTML = `<h4 class="font-bold text-lg">${formula.name}</h4>`;
+                        card.addEventListener('click', () => {
+                             if (formula.id === 'tabela-periodica') {
+                                showView('periodic-table-view');
+                                renderPeriodicTable();
+                            } else {
+                                renderCalculator(formula.id);
+                                showView('calculator-view');
+                            }
+                        });
+                        list.appendChild(card);
+                    });
+                    
+                    levelSection.appendChild(list);
+                    contentDiv.appendChild(levelSection);
+                }
             });
-
-            if (!response.ok) {
-                const errorBody = await response.json().catch(() => ({}));
-                throw new Error(errorBody?.error?.message || `Erro ${response.status}`);
-            }
-
-            const result = await response.json();
-            const candidate = result.candidates?.[0];
-
-            if (candidate?.content?.parts?.[0]?.text) {
-                return candidate.content.parts[0].text;
-            } else {
-                throw new Error("A API retornou uma resposta vazia ou malformada.");
-            }
         }
-    </script>
 
+        const categoryClassMap = {
+            "Metal alcalino": "metal-alcalino",
+            "Metal alcalino-terroso": "metal-alcalino-terroso",
+            "Metal de transição": "metal-transicao",
+            "Metal pós-transição": "metal-pos-transicao",
+            "Semimetal": "semimetal",
+            "Não-metal": "nao-metal",
+            "Halogênio": "halogênio",
+            "Gás nobre": "gas-nobre",
+            "Lantanídeo": "lanthanide",
+            "Actinídeo": "actinide"
+        };
+        
+        function renderPeriodicTable() {
+            const grid = document.getElementById('periodic-table-grid');
+            grid.innerHTML = '';
+            
+            const lanthanides = elements.filter(el => el.category === 'Lantanídeo').sort((a,b) => a.atomic_number - b.atomic_number);
+            const actinides = elements.filter(el => el.category === 'Actinídeo').sort((a,b) => a.atomic_number - b.atomic_number);
+            const mainElements = elements.filter(el => el.group > 0 || el.atomic_number === 57 || el.atomic_number === 89).sort((a,b) => a.atomic_number - b.atomic_number);
+            
+            mainElements.forEach(el => {
+                const cell = document.createElement('div');
+                const categoryClass = categoryClassMap[el.category] || '';
+                let cellStyle = `grid-column: ${el.group}; grid-row: ${el.period};`;
+
+                if (el.atomic_number === 57) {
+                    cellStyle = `grid-column: 3; grid-row: 6;`;
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'element-cell lanthanide-actinide-placeholder';
+                    placeholder.style = `grid-column: 4 / span 15; grid-row: 6;`;
+                    placeholder.innerHTML = '57-71';
+                    grid.appendChild(placeholder);
+                }
+                
+                if (el.atomic_number === 89) {
+                    cellStyle = `grid-column: 3; grid-row: 7;`;
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'element-cell lanthanide-actinide-placeholder';
+                    placeholder.style = `grid-column: 4 / span 15; grid-row: 7;`;
+                    placeholder.innerHTML = '89-103';
+                    grid.appendChild(placeholder);
+                }
+
+                cell.className = `element-cell ${categoryClass}`;
+                cell.style = cellStyle;
+                cell.innerHTML = `
+                    <div class="element-number">${el.atomic_number}</div>
+                    <div class="element-symbol">${el.symbol}</div>
+                    <div class="element-name text-xs">${el.name}</div>
+                `;
+                cell.addEventListener('click', () => showElementDetails(el));
+                grid.appendChild(cell);
+            });
+            
+            const createSubTable = (containerId, subElements) => {
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+                subElements.forEach(el => {
+                    const categoryClass = categoryClassMap[el.category] || '';
+                    const cell = document.createElement('div');
+                    cell.className = `element-cell ${categoryClass} p-2`;
+                    cell.innerHTML = `
+                        <div class="element-number text-[0.5rem]">${el.atomic_number}</div>
+                        <div class="element-symbol text-base">${el.symbol}</div>
+                    `;
+                    cell.addEventListener('click', () => showElementDetails(el));
+                    container.appendChild(cell);
+                });
+                container.classList.remove('hidden');
+            };
+
+            createSubTable('lanthanide-container', lanthanides);
+            createSubTable('actinide-container', actinides);
+        }
+
+        function showElementDetails(el) {
+            const detailsDiv = document.getElementById('element-details');
+            detailsDiv.innerHTML = `
+                <h4 class="text-lg font-bold mb-2">${el.name} (${el.symbol})</h4>
+                <p><strong>Nº Atômico:</strong> ${el.atomic_number}</p>
+                <p><strong>Massa Atômica:</strong> ${el.atomic_mass} u</p>
+                <p><strong>Categoria:</strong> ${el.category}</p>
+                <p><strong>Grupo:</strong> ${el.group > 0 ? el.group : 'Bloco f'}</p>
+                <p><strong>Período:</strong> ${el.period}</p>
+            `;
+            detailsDiv.classList.remove('hidden');
+        }
+
+        async function renderCalculator(formulaId) {
+            const formula = formulas.find(f => f.id === formulaId);
+            if (!formula) return;
+            
+            document.getElementById('calculator-title').textContent = formula.name;
+            const formulaDiv = document.getElementById('calculator-formula');
+            katex.render(formula.formula_display, formulaDiv, { throwOnError: false });
+
+            const descriptionDiv = document.getElementById('calculator-description');
+            if (formula.description) {
+                descriptionDiv.innerHTML = `<h3 class="font-semibold text-lg mb-2 text-gray-800 dark:text-gray-200">Sobre esta ferramenta:</h3><p class="whitespace-pre-wrap">${formula.description}</p>`;
+                descriptionDiv.classList.remove('hidden');
+            } else {
+                descriptionDiv.innerHTML = '';
+                descriptionDiv.classList.add('hidden');
+            }
+            
+            const inputsDiv = document.getElementById('calculator-inputs');
+            inputsDiv.innerHTML = '';
+
+            const calculateBtn = document.getElementById('calculate-btn');
+            
+            if (formula.id === 'conversor-moeda' && (!exchangeRates || exchangeRates.ERROR)) {
+                inputsDiv.innerHTML = `<p class="text-red-500 col-span-full">Não foi possível carregar as taxas de câmbio. Por favor, tente novamente mais tarde.</p>`;
+                calculateBtn.style.display = 'none';
+            } else {
+                calculateBtn.style.display = 'block';
+                formula.inputs.forEach(input => {
+                    const inputGroup = document.createElement('div');
+                     let inputElementHTML = '';
+                    
+                    if (input.type === 'textarea') {
+                        inputElementHTML = `<textarea id="${input.id}" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:ring-blue-500 focus:border-blue-500 h-24" placeholder="Ex: quanto é 25% de 80?"></textarea>`;
+                        inputGroup.className = 'col-span-full';
+                    }
+                    else if (input.type === 'select') {
+                        let options = input.options || [];
+                        if (formula.id === 'conversor-moeda' && (input.id === 'from' || input.id === 'to')) {
+                            options = Object.keys(exchangeRates).map(currency => ({ value: currency, text: currency }));
+                        }
+                        const optionsHTML = options.map(opt => `<option value="${opt.value}">${opt.text}</option>`).join('');
+                        inputElementHTML = `<select id="${input.id}" name="${input.id}" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:ring-blue-500 focus:border-blue-500">${optionsHTML}</select>`;
+                    } else {
+                         inputElementHTML = `<input type="text" id="${input.id}" name="${input.id}" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:ring-blue-500 focus:border-blue-500" placeholder="0">`;
+                    }
+
+                    inputGroup.innerHTML = `
+                        <label for="${input.id}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">${input.label}</label>
+                        <div class="flex items-center">
+                            ${inputElementHTML}
+                            ${input.unit ? `<span class="ml-2 text-gray-500 dark:text-gray-400">${input.unit}</span>` : ''}
+                        </div>
+                    `;
+                    inputsDiv.appendChild(inputGroup);
+                });
+                
+                const allInputs = inputsDiv.querySelectorAll('input, select, textarea');
+                allInputs.forEach(input => {
+                    input.addEventListener('keydown', (event) => {
+                        if (event.key === 'Enter') {
+                            event.preventDefault();
+                            performCalculation();
+                        }
+                    });
+                });
+                
+                if (formula.id === 'conversor-moeda') {
+                    const fromSelect = document.getElementById('from');
+                    const toSelect = document.getElementById('to');
+                    if(fromSelect) fromSelect.value = 'USD';
+                    if(toSelect) toSelect.value = 'BRL';
+                }
+            }
+
+            
+            document.getElementById('calculator-results').classList.add('hidden');
+            document.getElementById('calculator-steps-container').classList.add('hidden');
+
+            
+            const newBtn = calculateBtn.cloneNode(true);
+            calculateBtn.parentNode.replaceChild(newBtn, calculateBtn);
+
+            const performCalculation = async () => {
+                const inputValues = {};
+                formula.inputs.forEach(input => {
+                    inputValues[input.id] = document.getElementById(input.id).value;
+                });
+                
+                const result = await formula.calculationFunction(inputValues);
+                
+                const finalResultEl = document.getElementById('results-final');
+                
+                finalResultEl.textContent = result.result;
+                
+                document.getElementById('calculator-results').classList.remove('hidden');
+
+                if(result.steps) {
+                    const stepsContainer = document.getElementById('calculator-steps-container');
+                    const stepsDiv = document.getElementById('results-steps');
+                    stepsDiv.innerHTML = result.steps;
+                    stepsContainer.classList.remove('hidden');
+                } else {
+                     document.getElementById('calculator-steps-container').classList.add('hidden');
+                }
+            };
+            
+            newBtn.addEventListener('click', performCalculation);
+        }
+
+        // --- Navigation ---
+        document.getElementById('back-to-menu').addEventListener('click', () => showView('main-menu'));
+        document.getElementById('back-to-list').addEventListener('click', () => {
+             showView('list-view');
+             renderFormulaListView(currentCategory);
+        });
+        document.getElementById('back-from-periodic').addEventListener('click', () => {
+             showView('list-view');
+             renderFormulaListView('Química');
+        });
+
+        // --- Initial Render ---
+        renderMainMenu();
+        showView('main-menu');
+    });
+    </script>
 </body>
 </html>
-
