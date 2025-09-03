@@ -2057,7 +2057,7 @@
 
             const descriptionDiv = document.getElementById('calculator-description');
             if (formula.description) {
-                descriptionDiv.innerHTML = `<h3 class="font-semibold text-lg mb-2 text-gray-800 dark:text-gray-200">Sobre esta ferramenta:</h3><p class="whitespace-pre-wrap">${formula.description}</p>`;
+                descriptionDiv.innerHTML = `<h3 class="font-semibold text-lg mb-2 text-gray-800 dark:text-gray-200">Sobre esta ferramenta:</h3><p class="break-words">${formula.description}</p>`;
                 descriptionDiv.classList.remove('hidden');
             } else {
                 descriptionDiv.innerHTML = '';
