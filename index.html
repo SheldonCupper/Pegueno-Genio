@@ -31,6 +31,7 @@
             --toggle-border-color: #ddd;
             --toggle-icon-color: #2c3e50;
             --toggle-hover-bg: #f0f0f0;
+            --error-color: #c0392b;
         }
 
         body.dark-mode {
@@ -241,8 +242,14 @@
             margin-bottom: 30px;
         }
 
+        .search-wrapper {
+            position: relative;
+            flex-grow: 1;
+        }
+
         #searchInput {
             flex-grow: 1;
+            width: 100%;
             padding: 12px;
             border: 1px solid var(--input-border-color);
             background-color: var(--input-bg-color);
@@ -250,8 +257,37 @@
             border-radius: 8px;
             font-size: 16px;
             outline: none;
+            box-sizing: border-box;
         }
         
+        .suggestions-container {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--page-bg-color);
+            border: 1px solid var(--input-border-color);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            z-index: 10;
+            max-height: 250px;
+            overflow-y: auto;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .suggestion-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            text-align: left;
+            color: var(--text-color);
+            font-size: 15px;
+        }
+
+        .suggestion-item:hover {
+            background-color: var(--toggle-hover-bg);
+        }
+
         #searchButton {
             padding: 12px 20px;
             border: none;
@@ -371,6 +407,7 @@
         @media (max-width: 480px) {
             h1 { font-size: 1.5rem; }
             .search-container { flex-direction: column; }
+            .search-wrapper { width: 100%; }
             .book-navigation { flex-direction: column; gap: 15px; }
             .nav-button { width: 100%; }
             #pageSelectorContainer { order: -1; }
@@ -381,7 +418,7 @@
 <body>
 
     <main>
-        <button id="themeToggleBtn">🌙</button>
+        <button id="themeToggleBtn" aria-label="Alternar tema de cores">🌙</button>
         <h1>Pequeno Gênio</h1>
         <p>Descubra histórias fascinantes sobre qualquer tópico, como se estivesse a ler um livro.</p>
         
@@ -395,7 +432,10 @@
         </div>
 
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Ex: Antigo Egito, Leonardo da Vinci...">
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="Ex: Antigo Egito, Leonardo da Vinci..." autocomplete="off">
+                <div id="suggestionsContainer" class="suggestions-container"></div>
+            </div>
             <button id="searchButton">Pesquisar</button>
         </div>
 
@@ -431,12 +471,15 @@
 
     <script>
         // --- CHAVE DE API ---
-        // =========================================================================
-        // IMPORTANTE: Para o site funcionar online, precisa da sua chave de API aqui.
+        // =================================================================================
+        // ATENÇÃO: NUNCA exponha sua chave de API diretamente no código do lado do cliente
+        // em um aplicativo de produção. Qualquer pessoa pode visualizá-la e usá-la.
+        // Para desenvolvimento local, pode colar a sua chave aqui.
+        // Para produção, use um proxy de servidor para proteger a sua chave.
         // 1. Obtenha a sua chave em: https://makersuite.google.com/app/apikey
         // 2. Cole a chave entre as aspas.
-        // =========================================================================
-        const GEMINI_API_KEY = "AIzaSyBaCtfK1l7vFnWywMvpvv1Um6YjMeGy7bo"; // <-- SUBSTITUA ESTE TEXTO PELA SUA CHAVE
+        // =================================================================================
+        const GEMINI_API_KEY = "AIzaSyCKFJshs3mN3bNswg2qZ6DXaza4bC-37nk"; 
 
         // --- ELEMENTOS DO DOM ---
         const searchInput = document.getElementById('searchInput');
@@ -445,6 +488,7 @@
         const filterButtons = document.querySelectorAll('.filter-button');
         const themeToggleBtn = document.getElementById('themeToggleBtn');
         const body = document.body;
+        const suggestionsContainer = document.getElementById('suggestionsContainer');
         
         // Elementos do Livro
         const bookContainer = document.getElementById('bookContainer');
@@ -500,7 +544,13 @@
         });
 
         searchButton.addEventListener('click', fetchStory);
-        searchInput.addEventListener('keypress', (e) => e.key === 'Enter' && fetchStory());
+        searchInput.addEventListener('keypress', (e) => {
+             if (e.key === 'Enter') {
+                suggestionsContainer.style.display = 'none';
+                fetchStory()
+             };
+        });
+        searchInput.addEventListener('input', handleSearchInput);
         prevPageBtn.addEventListener('click', showPrevPage);
         nextPageBtn.addEventListener('click', showNextPage);
         pageSelector.addEventListener('change', selectPage);
@@ -527,6 +577,12 @@
              if (e.target === imageModal) closeModal();
         });
         
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-wrapper')) {
+                suggestionsContainer.style.display = 'none';
+            }
+        });
+
         function selectPage() {
             currentPageIndex = parseInt(this.value, 10);
             updatePageView();
@@ -547,8 +603,50 @@
                 document.documentElement.style.setProperty('--body-bg-image', newBg);
             }
         }
+        
+        // --- FUNÇÕES DE SUGESTÃO DE PESQUISA ---
+        async function handleSearchInput() {
+            const query = searchInput.value.trim();
+            if (query.length < 2) {
+                suggestionsContainer.style.display = 'none';
+                return;
+            }
 
-        // --- FUNÇÕES DE PAGINAÇÃO ---
+            try {
+                const apiUrl = `https://pt.wikipedia.org/w/api.php?action=opensearch&format=json&origin=*&search=${encodeURIComponent(query)}&limit=5`;
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error('A resposta da rede não foi ok');
+                const data = await response.json();
+                displaySuggestions(data[1] || []);
+            } catch (error) {
+                console.error('Erro ao buscar sugestões:', error);
+                suggestionsContainer.style.display = 'none';
+            }
+        }
+
+        function displaySuggestions(suggestions) {
+            if (suggestions.length === 0) {
+                suggestionsContainer.style.display = 'none';
+                return;
+            }
+
+            suggestionsContainer.innerHTML = '';
+            suggestions.forEach(suggestion => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item';
+                div.textContent = suggestion;
+                div.addEventListener('click', () => {
+                    searchInput.value = suggestion;
+                    suggestionsContainer.style.display = 'none';
+                    fetchStory();
+                });
+                suggestionsContainer.appendChild(div);
+            });
+
+            suggestionsContainer.style.display = 'block';
+        }
+
+        // --- FUNÇÕES DE PAGINAÇÃO E EXIBIÇÃO ---
         function paginateText(text) {
             const wordsPerPage = 200; 
             const paragraphs = text.split('<br><br>');
@@ -574,6 +672,7 @@
 
         function displayPages() {
             bookPagesContainer.innerHTML = '';
+            document.querySelector('.book-navigation').style.display = 'flex';
             
             const firstPageContent = `<img class="topic-image" src="${imageUrl}" alt="Imagem de ${currentTopicTitle}" style="${imageUrl ? 'display:block;' : 'display:none;'}"><div class="page-content">${pages[0]}</div>`;
             bookPagesContainer.innerHTML += `<div class="page" id="page-0">${firstPageContent}</div>`;
@@ -624,6 +723,16 @@
                 updatePageView();
             }
         }
+
+        function displayError(message) {
+            bookPagesContainer.innerHTML = `
+                <div class="page active" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: var(--error-color);">
+                    <h3>Ocorreu um Erro</h3>
+                    <p>${message}</p>
+                </div>`;
+            document.querySelector('.book-navigation').style.display = 'none';
+            actionButtons.style.display = 'none';
+        }
         
         // --- FUNÇÕES PRINCIPAIS ---
         function applyInitialTheme() {
@@ -641,10 +750,10 @@
 
         async function fetchRandomCuriosityOnLoad() {
              if (!hasApiKey()) {
-                curiosityContainer.style.display = 'block';
-                curiosityContainer.innerHTML = `<h3>Você Sabia?</h3><p>Para ativar as funcionalidades de curiosidades e resumos, obtenha a sua chave de API gratuita no Google AI Studio e cole no código deste ficheiro.</p>`;
-                return;
-            }
+                 curiosityContainer.style.display = 'block';
+                 curiosityContainer.innerHTML = `<h3>Você Sabia?</h3><p>Para ativar as funcionalidades de curiosidades e resumos, obtenha a sua chave de API gratuita no Google AI Studio e cole no código deste ficheiro.</p>`;
+                 return;
+             }
 
             curiosityContainer.style.display = 'block';
             curiosityContainer.innerHTML = '<h3>Você Sabia?</h3><div class="loader" style="margin: 10px auto; width: 20px; height: 20px;"></div>';
@@ -665,6 +774,7 @@
             const query = searchInput.value.trim();
             if (!query) return;
 
+            suggestionsContainer.style.display = 'none';
             loader.style.display = 'block';
             bookContainer.style.display = 'none';
             curiosityContainer.style.display = 'none';
@@ -679,7 +789,7 @@
                 const pageData = data.query.pages[Object.keys(data.query.pages)[0]];
 
                 if (pageData.missing) {
-                     paginateText(`Não foi possível encontrar resultados para "${query}".`);
+                    paginateText(`Não foi possível encontrar resultados para "${query}".`);
                 } else {
                     currentTopicTitle = pageData.title;
                     currentTopicText = pageData.extract || 'Conteúdo não encontrado.';
@@ -698,13 +808,13 @@
                         summarizeButton.title = "Adicione a sua chave de API do Google AI para ativar esta funcionalidade.";
                     }
                 }
+                 displayPages();
             } catch (error) {
                 console.error('Erro ao buscar na API da Wikipedia:', error);
-                paginateText('Ocorreu um erro de rede. Por favor, tente novamente.');
+                displayError('Ocorreu um erro de rede. Por favor, tente novamente.');
             } finally {
                 loader.style.display = 'none';
                 bookContainer.style.display = 'block';
-                displayPages();
                 searchButton.disabled = false;
             }
         }
@@ -727,11 +837,10 @@
 
             } catch (error) {
                 console.error("Não foi possível gerar o resumo:", error);
-                paginateText(currentTopicText.replace(/\n/g, '<br><br>')); // Restaura o original
-                displayPages();
-                alert(`Não foi possível gerar o resumo: ${error.message}`);
-                summarizeButton.disabled = false;
-                summarizeButton.textContent = 'Resumir Texto';
+                displayError(`Não foi possível gerar o resumo: ${error.message}`);
+            } finally {
+                 summarizeButton.disabled = false;
+                 summarizeButton.textContent = 'Resumir Texto';
             }
         }
 
@@ -754,7 +863,8 @@
         }
 
         function hasApiKey() {
-            return typeof GEMINI_API_KEY !== 'undefined' && GEMINI_API_KEY && GEMINI_API_KEY !== "COLE_AQUI_SUA_CHAVE_REAL";
+            const placeholderKey = "COLOQUE_SUA_CHAVE_AQUI";
+            return typeof GEMINI_API_KEY !== 'undefined' && GEMINI_API_KEY && GEMINI_API_KEY !== placeholderKey;
         }
 
         async function callGeminiAPI(promptText) {
@@ -782,6 +892,11 @@
             if (candidate?.content?.parts?.[0]?.text) {
                 return candidate.content.parts[0].text;
             } else {
+                // If the API blocks the request, it might not return text.
+                // Check for a finishReason and promptFeedback for more details.
+                if (candidate?.finishReason === 'SAFETY') {
+                     throw new Error("A resposta foi bloqueada devido a políticas de segurança.");
+                }
                 throw new Error("A API retornou uma resposta vazia ou malformada.");
             }
         }
